@@ -16,6 +16,8 @@ enum {
   JMP_INST,
   EQ_INST,
   N_EQ_INST,
+  GET_LOCAL_INST,
+  LOAD_LOCAL_INST,
 };
 
 #define PUSH(value)                                                            \
@@ -49,6 +51,12 @@ enum {
 
 #define N_EQ                                                                   \
   { .opcode = IWORD(N_EQ_INST) }
+
+#define GET_LOCAL(value)                                                       \
+  { .opcode = IWORD(GET_LOCAL_INST), .params = value }
+
+#define LOAD_LOCAL(value)                                                      \
+  { .opcode = IWORD(LOAD_LOCAL_INST) }
 
 struct Inst {
   word opcode;
@@ -89,6 +97,12 @@ struct Inst {
       break;
     case JMP_INST:
       cout << "<" << opcode.INT << "> JMP";
+      break;
+    case GET_LOCAL_INST:
+      cout << "<" << opcode.INT << "> GET_LOCAL";
+      break;
+    case LOAD_LOCAL_INST:
+      cout << "<" << opcode.INT << "> LOAD_LOCAL";
       break;
     }
     cout << "\n  FLAGS: ";

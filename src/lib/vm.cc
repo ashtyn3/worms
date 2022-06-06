@@ -161,6 +161,14 @@ word Worms::exec() {
     jump_count.INT++;
     break;
   }
+  case GET_LOCAL_INST: {
+    stack.push(stack.op_stack[in.params[0].INT]);
+    break;
+  }
+  case LOAD_LOCAL_INST: {
+    word w = stack.pop();
+    stack.push_loc(w);
+  }
   }
   return {.INT = TRAP_OK};
 }
