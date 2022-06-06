@@ -1,0 +1,5 @@
+add_library(Instructions INTERFACE inst.h)
+add_library(Core INTERFACE core.h)
+add_library(Traps INTERFACE traps.h)
+add_library(Stack STATIC stack.h stack.cc)
+add_library(VM STATIC vm.h vm.cc)
