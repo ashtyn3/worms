@@ -163,11 +163,17 @@ word Worms::exec() {
   }
   case GET_LOCAL_INST: {
     stack.push(stack.op_stack[in.params[0].INT]);
+    ip.INT++;
     break;
   }
   case LOAD_LOCAL_INST: {
+    if (stack.top == -1) {
+      return {.INT = TRAP_STACK_UNDERFLOW};
+    }
     word w = stack.pop();
     stack.push_loc(w);
+    ip.INT++;
+    break;
   }
   }
   return {.INT = TRAP_OK};
@@ -198,6 +204,7 @@ void Worms::run() {
     word status = exec();
     if (full_trace) {
       stack.stdout_dump();
+      stack.op_stdout_dump();
       cout << "\n==============================\n\n";
     }
     if (jump_count.INT == 60) {

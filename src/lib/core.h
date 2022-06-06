@@ -8,5 +8,6 @@ union word {
 };
 
 #define STACK_SIZE 8000
+
 #define IWORD(int)                                                             \
   { .INT = int }

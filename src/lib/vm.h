@@ -9,7 +9,7 @@
 struct Worms {
   word ip;
   vector<Inst> program;
-  Stack stack;
+  Stack_frame stack;
   bool halted;
   bool full_trace;
   word jump_count = {.INT = 0};

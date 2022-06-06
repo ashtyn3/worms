@@ -1,29 +1,19 @@
 #include "stack.h"
 
-word Stack::at_top() { return stack[top]; }
+word Stack_frame::at_top() { return stack[top]; }
 
-word Stack::pop() {
+word Stack_frame::pop() {
   word top_val = at_top();
   top--;
   return top_val;
 }
 
-void Stack::pop_frame() {
-  pointer = pointer - top;
-  top = pointer;
-}
-
-void Stack::push(word value) {
+void Stack_frame::push(word value) {
   top++;
   stack[top] = value;
 }
 
-void Stack::push_frame() {
-  top++;
-  pointer = top;
-}
-
-void Stack::stdout_dump() {
+void Stack_frame::stdout_dump() {
   cout << "stack:" << endl;
   if (top == -1) {
     cout << "  [empty]" << endl;
@@ -33,7 +23,7 @@ void Stack::stdout_dump() {
     cout << "  " << i << ": " << stack[i].INT << endl;
   }
 }
-void Stack::op_stdout_dump() {
+void Stack_frame::op_stdout_dump() {
   cout << "operator stack:" << endl;
   if (op_top == -1) {
     cout << "  [empty]" << endl;
@@ -44,8 +34,19 @@ void Stack::op_stdout_dump() {
   }
 }
 
-void Stack::push_loc(word value) {
+void Stack_frame::push_loc(word value) {
   op_top++;
   op_stack[op_top] = value;
 }
-void Stack::pop_loc(int64_t id) { op_top = op_top - id; }
+void Stack_frame::pop_loc(int64_t id) { op_top = op_top - id; }
+
+// call stack related functions ->
+
+void Call_stack::push_frame() {
+  top++;
+  pointer = top;
+}
+void Call_stack::pop_frame() {
+  pointer = pointer - top;
+  top = pointer;
+}
