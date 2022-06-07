@@ -1,3 +1,5 @@
+#include "compiler/lex.h"
+#include "compiler/parser.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -11,19 +13,24 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   string name(argv[1]);
-  // Create a text string, which is used to output the text file
-  string myText;
+  string line;
+  vector<string> lines;
 
-  // Read from the text file
-  ifstream MyReadFile(name);
+  std::ifstream file(name);
+  std::string str((std::istreambuf_iterator<char>(file)),
+                  std::istreambuf_iterator<char>());
 
-  // Use a while loop together with the getline() function to read the file line
-  // by line
-  while (getline(MyReadFile, myText)) {
-    // Output the text from the file
-    cout << myText << endl;
+  vector<char> v(str.length());
+  copy(str.begin(), str.end(), v.begin());
+
+  Lexer l(v);
+
+  l.Lex();
+  Parser p(l.toks);
+  vector<Parse_tok *> p_toks;
+  while (p.peek().token != "") {
+    p_toks.push_back(p.run());
   }
 
-  // Close the file
-  MyReadFile.close();
+  file.close();
 }

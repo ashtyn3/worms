@@ -1,6 +1,6 @@
-start(none none) -> i32 {
+fn start(args i32) -> i32
     call &push 32;
     call &push 32;
     call &add;
     ret;
-}
+end start;
