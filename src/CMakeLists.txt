@@ -1,4 +1,5 @@
 add_subdirectory(lib)
+add_subdirectory(wr)
 
 add_executable(worms main.cc)
 

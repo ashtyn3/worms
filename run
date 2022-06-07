@@ -1,16 +1,26 @@
 #!/usr/bin/env python3
 import subprocess
 import os
+import sys
 os.chdir("build")
 
 build = subprocess.run(["ninja"], stdout=subprocess.DEVNULL,
   stderr=subprocess.DEVNULL)
 
+os.chdir("..")
 if build.returncode == 0:
     print("Built!\n")
 else:
     print("Failed to build!\n")
 
+if len(sys.argv) == 1:
+    output = subprocess.run(["bin/worms"], shell=True)
+    print("Completed with status:",output.returncode)
+else:
+    if sys.argv[1] == "wr":
+        output = subprocess.run(["./build/src/bin/worms_wr"]+sys.argv[2:])
+        print("Completed with status:",output.returncode)
+    if sys.argv[1] == "vm":
+        output = subprocess.run(["./build/bin/worms"], shell=True)
+        print("Completed with status:",output.returncode)
 
-output = subprocess.run(["bin/worms"], shell=True)
-print("Completed with status:",output.returncode)
