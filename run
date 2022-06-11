@@ -4,7 +4,7 @@ import os
 import sys
 os.chdir("build")
 
-build = subprocess.run(["ninja"], stdout=subprocess.DEVNULL,
+build = subprocess.run(["meson", "compile"], stdout=subprocess.DEVNULL,
   stderr=subprocess.DEVNULL)
 
 os.chdir("..")
@@ -14,13 +14,13 @@ else:
     print("Failed to build!\n")
 
 if len(sys.argv) == 1:
-    output = subprocess.run(["bin/worms"], shell=True)
+    output = subprocess.run(["build/worms"], shell=True)
     print("Completed with status:",output.returncode)
 else:
     if sys.argv[1] == "wr":
-        output = subprocess.run(["./build/src/bin/worms_wr"]+sys.argv[2:])
+        output = subprocess.run(["build/worms_wr"]+sys.argv[2:])
         print("Completed with status:",output.returncode)
     if sys.argv[1] == "vm":
-        output = subprocess.run(["./build/bin/worms"], shell=True)
+        output = subprocess.run(["build/worms"], shell=True)
         print("Completed with status:",output.returncode)
 

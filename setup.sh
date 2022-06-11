@@ -1,7 +1,5 @@
-rm -r build
-mkdir build
+meson setup build
 cd build
-cmake -G Ninja -B . ..
 ninja
 cd ..
-echo "Binary built to $(pwd)/build/bin"
+echo "Binary built to $(pwd)/build"

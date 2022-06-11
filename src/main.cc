@@ -18,7 +18,8 @@ int main() {
   //                      N_EQ,
   //                      JMP({IWORD(1)}, {IWORD(1)}),
   //                      HALT};
-  vector<Inst> prog = {PUSH({IWORD(2)}), LOAD_LOCAL, HALT};
+  vector<Inst> prog = {PUSH({IWORD(2)}),      LOAD_LOCAL, GET_LOCAL({IWORD(0)}),
+                       GET_LOCAL({IWORD(0)}), ADD,        HALT};
   Worms *hi = new Worms;
   hi->full_trace = true;
   hi->load_program(prog);

@@ -1,0 +1,5 @@
+inst = static_library('Instructions', './inst.h')
+core = static_library('Core', './core.h')
+traps = static_library('Traps', './traps.h')
+stack = static_library('Stack', './stack.h', './stack.cc')
+vm = static_library('VM', sources: ['./vm.h', './vm.cc'], link_with: stack)

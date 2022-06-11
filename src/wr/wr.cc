@@ -12,7 +12,14 @@ int main(int argc, char *argv[]) {
     cout << "usage: worms_wr <filename>" << endl;
     return 1;
   }
-  string name(argv[1]);
+  string name;
+  if (argv[1]) {
+    name = argv[1];
+  } else {
+    cout << "usage: worms_wr <filename>" << endl;
+    return 1;
+  }
+  cout << "compiling " << name << endl;
   string line;
   vector<string> lines;
 
@@ -28,9 +35,12 @@ int main(int argc, char *argv[]) {
   l.Lex();
   Parser p(l.toks);
   vector<Parse_tok *> p_toks;
-  while (p.peek().token != "") {
-    p_toks.push_back(p.run());
-  }
+  // while (p.peek().token != "" || p.peek().pos.line != -1) {
+  //   p_toks.push_back(p.run());
+  // }
+  p_toks = p.while_run();
+  cout << p_toks[0]->function->ret_type << endl;
 
   file.close();
+  return 0;
 }

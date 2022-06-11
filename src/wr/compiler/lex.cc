@@ -70,7 +70,7 @@ void Lexer::Lex() {
         next_ch();
       }
       if (name == "call" || name == "fn" || name == "end" || name == "i32" ||
-          name == "i64" || name == "f32" || name == "f64") {
+          name == "i64" || name == "f32" || name == "f64" || name == "ret") {
         toks.push_back({.pos = {.start_col = start,
                                 .end_col = index,
                                 .line = line_num + 1},
