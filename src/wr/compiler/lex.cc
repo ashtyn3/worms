@@ -35,7 +35,6 @@ void Lexer::Lex() {
            .token = name});
     } else if (isdigit(ch)) {
       int start = index;
-      next_ch();
       string digit;
       digit.push_back(ch);
       next_ch();

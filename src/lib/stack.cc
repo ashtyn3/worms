@@ -1,11 +1,12 @@
 #include "stack.h"
+#include "utils.h"
 
 word Stack_frame::at_top() { return stack[top]; }
 
 word Stack_frame::pop() {
-  word top_val = at_top();
+  word value = at_top();
   top--;
-  return top_val;
+  return value;
 }
 
 void Stack_frame::push(word value) {

@@ -10,8 +10,11 @@ struct Stack_frame {
   word stack[STACK_SIZE];
 
   word at_top();
+
   word pop();
+
   void push(word value);
+
   void stdout_dump();
   void op_stdout_dump();
 

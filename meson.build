@@ -7,7 +7,7 @@ project('worms', 'cpp',
 subdir('./src')
 executable('worms',
            './src/main.cc',
-           install : true, link_with: [vm,traps, core, inst],link_args: ['-static'])
+           install : true, link_with: [vm,traps, core, inst, module],link_args: ['-static'])
 
 executable('worms_wr',
            './src/wr/wr.cc',

@@ -137,7 +137,7 @@ word Worms::exec() {
     break;
   }
   case JMP_INST: {
-    if (in.params[0].INT < 0 || in.params[0].INT >= program.size()) {
+    if (in.params[0].INT < 0 || in.params[0].INT >= (int)program.size()) {
       return {.INT = TRAP_BAD_JUMP};
     }
 

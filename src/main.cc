@@ -3,6 +3,8 @@
 #include "lib/core.h"
 #include "lib/inst.h"
 #include "lib/vm.h"
+#include "snailer/module.cc"
+#include "snailer/module.h"
 #include <vector>
 
 using namespace std;
@@ -18,10 +20,26 @@ int main() {
   //                      N_EQ,
   //                      JMP({IWORD(1)}, {IWORD(1)}),
   //                      HALT};
-  vector<Inst> prog = {PUSH({IWORD(2)}),      LOAD_LOCAL, GET_LOCAL({IWORD(0)}),
-                       GET_LOCAL({IWORD(0)}), ADD,        HALT};
-  Worms *hi = new Worms;
-  hi->full_trace = true;
-  hi->load_program(prog);
-  hi->run();
+  // vector<Inst> prog = {PUSH({IWORD(2)}),      LOAD_LOCAL,
+  // GET_LOCAL({IWORD(0)}),
+  //                      GET_LOCAL({IWORD(0)}), ADD,        HALT};
+  // Worms *hi = new Worms;
+  // hi->full_trace = true;
+  // hi->load_program(prog);
+  // hi->run();
+  Module *mod = new Module;
+  Fn_block *fn = mod->make_fn("main", snailer_int64_t);
+
+  fn->add_param_sig("a", snailer_float64_t);
+
+  Fn_call_block *c = new Fn_call_block("hi", true);
+
+  Value *v = new Value();
+  v->set_Integer(2);
+
+  c->add_param(v);
+
+  fn->add_block(c);
+
+  cout << fn->produce() << endl;
 }
