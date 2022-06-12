@@ -66,6 +66,7 @@ void Stack_frame::push_loc(word addr, word value) {
   op_top++;
   op_stack[addr.INT] = value;
 }
+
 void Stack_frame::pop_loc(int64_t id) {
   for (int i = id; i < op_stack[id].INT; i++) {
     op_stack[i] = {};
@@ -78,6 +79,7 @@ void Call_stack::push_frame() {
   top++;
   pointer = top;
 }
+
 void Call_stack::pop_frame() {
   pointer = pointer - top;
   top = pointer;

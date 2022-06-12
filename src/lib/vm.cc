@@ -165,7 +165,6 @@ word Worms::exec() {
     int addr = in.params[0].INT + 1;
     int length = stack.op_stack[in.params[0].INT].INT;
     for (int i = addr; i < addr + length; i++) {
-      cout << i << endl;
       stack.push(stack.op_stack[i]);
     }
     stack.push(IWORD(length));
