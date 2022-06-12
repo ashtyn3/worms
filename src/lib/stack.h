@@ -2,6 +2,7 @@
 
 #include "core.h"
 #include <iostream>
+#include <map>
 
 using namespace std;
 struct Stack_frame {
@@ -21,7 +22,8 @@ struct Stack_frame {
   int op_top = -1;
   word op_stack[STACK_SIZE];
 
-  void push_loc(word value);
+  int alloc_loc(int size);
+  void push_loc(word addr, word value);
   void pop_loc(int64_t id);
 };
 

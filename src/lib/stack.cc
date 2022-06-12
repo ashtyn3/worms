@@ -1,5 +1,4 @@
 #include "stack.h"
-#include "utils.h"
 
 word Stack_frame::at_top() { return stack[top]; }
 
@@ -35,11 +34,43 @@ void Stack_frame::op_stdout_dump() {
   }
 }
 
-void Stack_frame::push_loc(word value) {
-  op_top++;
-  op_stack[op_top] = value;
+int Stack_frame::alloc_loc(int size) {
+  int start_addr = -1;
+  int space = 0;
+  for (int i = 0; i < STACK_SIZE; i++) {
+    if (space == size + 1) {
+      break;
+    }
+    if (op_stack[i].INT == 0 && op_stack[i].FLOAT == 0.0 &&
+        op_stack[i].INT16 == 0 && op_stack[i].INT32 == 0 &&
+        op_stack[i].INT8 == 0) {
+      if (start_addr == -1) {
+        start_addr = i;
+      } else {
+        space++;
+      }
+    } else {
+      space = 0;
+      start_addr = -1;
+    }
+  }
+
+  if (start_addr > -1) {
+    op_stack[start_addr] = IWORD(size);
+  }
+
+  return start_addr;
 }
-void Stack_frame::pop_loc(int64_t id) { op_top = op_top - id; }
+
+void Stack_frame::push_loc(word addr, word value) {
+  op_top++;
+  op_stack[addr.INT] = value;
+}
+void Stack_frame::pop_loc(int64_t id) {
+  for (int i = id; i < op_stack[id].INT; i++) {
+    op_stack[i] = {};
+  }
+}
 
 // call stack related functions ->
 

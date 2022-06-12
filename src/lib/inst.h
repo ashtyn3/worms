@@ -55,8 +55,8 @@ enum {
 #define GET_LOCAL(value)                                                       \
   { .opcode = IWORD(GET_LOCAL_INST), .params = value }
 
-#define LOAD_LOCAL                                                             \
-  { .opcode = IWORD(LOAD_LOCAL_INST) }
+#define LOAD_LOCAL(size)                                                       \
+  { .opcode = IWORD(LOAD_LOCAL_INST), .params = size }
 
 struct Inst {
   word opcode;

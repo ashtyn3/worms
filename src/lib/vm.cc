@@ -162,6 +162,9 @@ word Worms::exec() {
     break;
   }
   case GET_LOCAL_INST: {
+    for (int i = 0; i < stack.op_stack[in.params[0].INT].INT; i++) {
+      stack.push(stack.op_stack[in.params[0].INT + i]);
+    }
     stack.push(stack.op_stack[in.params[0].INT]);
     ip.INT++;
     break;
@@ -170,8 +173,20 @@ word Worms::exec() {
     if (stack.top == -1) {
       return {.INT = TRAP_STACK_UNDERFLOW};
     }
-    word w = stack.pop();
-    stack.push_loc(w);
+    if (in.params[0].INT == 0) {
+      word w = stack.pop();
+      int addr = stack.alloc_loc(1);
+      stack.push_loc(IWORD(addr + 1), w);
+    } else {
+      int addr = stack.alloc_loc(in.params[0].INT) + 1;
+      int length = in.params[0].INT;
+
+      for (int i = 0; i < length + 1; i++) {
+        word val = stack.pop();
+        int index = addr + i;
+        stack.push_loc(IWORD(index), val);
+      }
+    }
     ip.INT++;
     break;
   }
