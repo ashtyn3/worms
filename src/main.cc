@@ -21,7 +21,7 @@ int main() {
   //                      JMP({IWORD(1)}, {IWORD(1)}),
   //                      HALT};
   vector<Inst> prog = {PUSH({IWORD(72)}), PUSH({IWORD(73)}),
-                       LOAD_LOCAL({IWORD(2)}), HALT};
+                       LOAD_LOCAL({IWORD(2)}), GET_LOCAL({IWORD(0)}), HALT};
   Worms *hi = new Worms;
   hi->full_trace = true;
   hi->load_program(prog);

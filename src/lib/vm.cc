@@ -162,10 +162,13 @@ word Worms::exec() {
     break;
   }
   case GET_LOCAL_INST: {
-    for (int i = 0; i < stack.op_stack[in.params[0].INT].INT; i++) {
-      stack.push(stack.op_stack[in.params[0].INT + i]);
+    int addr = in.params[0].INT + 1;
+    int length = stack.op_stack[in.params[0].INT].INT;
+    for (int i = addr; i < addr + length; i++) {
+      cout << i << endl;
+      stack.push(stack.op_stack[i]);
     }
-    stack.push(stack.op_stack[in.params[0].INT]);
+    stack.push(IWORD(length));
     ip.INT++;
     break;
   }
@@ -180,12 +183,13 @@ word Worms::exec() {
     } else {
       int addr = stack.alloc_loc(in.params[0].INT) + 1;
       int length = in.params[0].INT;
-
-      for (int i = 0; i < length + 1; i++) {
-        word val = stack.pop();
+      word val;
+      for (int i = 0; i < length; i++) {
+        val = stack.pop();
         int index = addr + i;
         stack.push_loc(IWORD(index), val);
       }
+      stack.push_loc(IWORD(addr + length), val);
     }
     ip.INT++;
     break;
