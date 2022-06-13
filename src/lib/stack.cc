@@ -20,7 +20,7 @@ void Stack_frame::stdout_dump() {
     return;
   }
   for (int i = 0; i < top + 1; i++) {
-    cout << "  " << i << ": " << stack[i].INT << endl;
+    cout << "  " << i << ": " << GET_VALUE(stack[i]) << endl;
   }
 }
 void Stack_frame::op_stdout_dump() {
@@ -30,7 +30,7 @@ void Stack_frame::op_stdout_dump() {
     return;
   }
   for (int i = 0; i < op_top + 1; i++) {
-    cout << "  " << i << ": " << op_stack[i].INT << endl;
+    cout << "  " << i << ": " << GET_VALUE(op_stack[i]) << endl;
   }
 }
 
@@ -41,9 +41,9 @@ int Stack_frame::alloc_loc(int size) {
     if (space == size + 1) {
       break;
     }
-    if (op_stack[i].INT == 0 && op_stack[i].FLOAT == 0.0 &&
-        op_stack[i].INT16 == 0 && op_stack[i].INT32 == 0 &&
-        op_stack[i].INT8 == 0) {
+    if (op_stack[i].value.INT == 0 && op_stack[i].value.FLOAT == 0.0 &&
+        op_stack[i].value.INT16 == 0 && op_stack[i].value.INT32 == 0 &&
+        op_stack[i].value.INT8 == 0) {
       if (start_addr == -1) {
         start_addr = i;
       } else {
@@ -64,11 +64,11 @@ int Stack_frame::alloc_loc(int size) {
 
 void Stack_frame::push_loc(word addr, word value) {
   op_top++;
-  op_stack[addr.INT] = value;
+  op_stack[addr.value.INT] = value;
 }
 
 void Stack_frame::pop_loc(int64_t id) {
-  for (int i = id; i < op_stack[id].INT; i++) {
+  for (int i = id; i < op_stack[id].value.INT; i++) {
     op_stack[i] = {};
   }
 }

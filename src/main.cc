@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include "lib/core.h"
 #include "lib/inst.h"
 #include "lib/vm.h"
 #include "snailer/module.cc"
@@ -20,8 +19,10 @@ int main() {
   //                      N_EQ,
   //                      JMP({IWORD(1)}, {IWORD(1)}),
   //                      HALT};
-  vector<Inst> prog = {PUSH({IWORD(72)}), PUSH({IWORD(73)}),
-                       LOAD_LOCAL({IWORD(2)}), GET_LOCAL({IWORD(0)}), HALT};
+  // Inst add = {.opcode = IWORD(ADD_INST),
+  //             .flags = {IWORD(0), IWORD(0), IWORD(4)}};
+  vector<Inst> prog = {PUSH({FWORD(0.1)}), PUSH({FWORD(0.1)}), ADD(IWORD_8(4)),
+                       HALT};
   Worms *hi = new Worms;
   hi->full_trace = true;
   hi->load_program(prog);

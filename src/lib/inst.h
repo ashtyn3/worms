@@ -32,16 +32,18 @@ enum {
 #define DUP(flags, params)                                                     \
   { .opcode = IWORD(DUP_INST), flags, params }
 
-#define ADD                                                                    \
-  { .opcode = IWORD(ADD_INST) }
+#define ADD(flag)                                                              \
+  {                                                                            \
+    .opcode = IWORD(ADD_INST), .flags = { IWORD(0), IWORD(0), flag }           \
+  }
 
-#define SUB                                                                    \
-  { .opcode = IWORD(SUB_INST) }
-#define MUL                                                                    \
-  { .opcode = IWORD(MUL_INST) }
+#define SUB(flag)                                                              \
+  { .opcode = IWORD(SUB_INST), .flags = flag }
+#define MUL(flag)                                                              \
+  { .opcode = IWORD(MUL_INST), .flags = flag }
 
-#define DIV                                                                    \
-  { .opcode = IWORD(DIV_INST) }
+#define DIV(flag)                                                              \
+  { .opcode = IWORD(DIV_INST), .flags = flag }
 
 #define JMP(value, value2)                                                     \
   { .opcode = IWORD(JMP_INST), .flags = value, .params = value2 }
@@ -63,55 +65,55 @@ struct Inst {
   word flags[3];
   word params[5];
   void debug(word ip) {
-    cout << ip.INT << ": ";
-    switch (opcode.INT) {
+    cout << ip.value.INT << ": ";
+    switch (opcode.value.INT) {
     case PUSH_INST:
-      cout << "<" << opcode.INT << "> PUSH";
+      cout << "<" << opcode.value.INT << "> PUSH";
       break;
     case POP_INST:
-      cout << "<" << opcode.INT << "> POP";
+      cout << "<" << opcode.value.INT << "> POP";
       break;
     case HALT_INST:
-      cout << "<" << opcode.INT << "> HALT";
+      cout << "<" << opcode.value.INT << "> HALT";
       break;
     case ADD_INST:
-      cout << "<" << opcode.INT << "> ADD";
+      cout << "<" << opcode.value.INT << "> ADD";
       break;
     case SUB_INST:
-      cout << "<" << opcode.INT << "> SUB";
+      cout << "<" << opcode.value.INT << "> SUB";
       break;
     case MUL_INST:
-      cout << "<" << opcode.INT << "> SUB";
+      cout << "<" << opcode.value.INT << "> SUB";
       break;
     case DIV_INST:
-      cout << "<" << opcode.INT << "> DIV";
+      cout << "<" << opcode.value.INT << "> DIV";
       break;
     case EQ_INST:
-      cout << "<" << opcode.INT << "> EQ";
+      cout << "<" << opcode.value.INT << "> EQ";
       break;
     case N_EQ_INST:
-      cout << "<" << opcode.INT << "> NEQ";
+      cout << "<" << opcode.value.INT << "> NEQ";
       break;
     case DUP_INST:
-      cout << "<" << opcode.INT << "> DUP";
+      cout << "<" << opcode.value.INT << "> DUP";
       break;
     case JMP_INST:
-      cout << "<" << opcode.INT << "> JMP";
+      cout << "<" << opcode.value.INT << "> JMP";
       break;
     case GET_LOCAL_INST:
-      cout << "<" << opcode.INT << "> GET_LOCAL";
+      cout << "<" << opcode.value.INT << "> GET_LOCAL";
       break;
     case LOAD_LOCAL_INST:
-      cout << "<" << opcode.INT << "> LOAD_LOCAL";
+      cout << "<" << opcode.value.INT << "> LOAD_LOCAL";
       break;
     }
     cout << "\n  FLAGS: ";
     for (int i = 0; i < 3; i++) {
-      cout << flags[i].INT << " ";
+      cout << GET_VALUE(flags[i]) << " ";
     }
     cout << "\n  PARAMS: ";
     for (int i = 0; i < 5; i++) {
-      cout << params[i].INT << " ";
+      cout << GET_VALUE(params[i]) << " ";
     }
     cout << endl;
   }

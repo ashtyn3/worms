@@ -12,8 +12,8 @@ struct Worms {
   Stack_frame stack;
   bool halted;
   bool full_trace;
-  word jump_count = {.INT = 0};
-  word last_jmp = {.INT = -1};
+  word jump_count = IWORD(0);
+  word last_jmp = IWORD(-1);
   word load_program(vector<Inst> prog);
   word exec();
   string debug(word trap);

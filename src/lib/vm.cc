@@ -2,12 +2,12 @@
 
 word Worms::load_program(vector<Inst> prog) {
   program = prog;
-  return {.INT = TRAP_OK};
+  return IWORD(TRAP_OK);
 }
 
 word Worms::exec() {
-  Inst in = program[ip.INT];
-  switch (in.opcode.INT) {
+  Inst in = program[ip.value.INT];
+  switch (in.opcode.value.INT) {
 
   case HALT_INST: {
     halted = true;
@@ -16,172 +16,164 @@ word Worms::exec() {
 
   case PUSH_INST: {
     if (stack.top + 1 >= STACK_SIZE) {
-      return {.INT = TRAP_STACK_OVERFLOW};
+      return IWORD(TRAP_STACK_OVERFLOW);
     }
     stack.push(in.params[0]);
-    ip.INT++;
+    ip.value.INT++;
     break;
   }
   case POP_INST: {
     if (stack.top - 1 < 0) {
-      return {.INT = TRAP_STACK_UNDERFLOW};
+      return IWORD(TRAP_STACK_UNDERFLOW);
     }
     stack.pop();
-    ip.INT++;
+    ip.value.INT++;
     break;
   }
 
   case DUP_INST: {
     word to_dup;
-    if (in.flags[0].INT == 0) {
+    if (in.flags[0].value.INT == 0) {
       to_dup = stack.at_top();
-    } else if (in.flags[0].INT == 1) {
+    } else if (in.flags[0].value.INT == 1) {
 
-      if (in.params[0].INT >= STACK_SIZE) {
-        return {.INT = TRAP_STACK_OVERFLOW};
+      if (in.params[0].value.INT >= STACK_SIZE) {
+        return IWORD(TRAP_STACK_OVERFLOW);
       }
 
-      if (in.params[0].INT < 0) {
-        return {.INT = TRAP_STACK_UNDERFLOW};
+      if (in.params[0].value.INT < 0) {
+        return IWORD(TRAP_STACK_UNDERFLOW);
       }
 
-      to_dup = stack.stack[in.params[0].INT];
+      to_dup = stack.stack[in.params[0].value.INT];
     } else {
-      return {.INT = TRAP_UNKNOWN_FLAG};
+      return IWORD(TRAP_UNKNOWN_FLAG);
     }
 
-    if (in.flags[1].INT == 0) {
+    if (in.flags[1].value.INT == 0) {
       stack.push(to_dup);
     } else {
-      return {.INT = TRAP_UNKNOWN_FLAG};
+      return IWORD(TRAP_UNKNOWN_FLAG);
     }
-    ip.INT++;
+    ip.value.INT++;
     break;
   }
 
   case ADD_INST: {
     if (stack.top - 1 < 0) {
-      return {.INT = TRAP_STACK_UNDERFLOW};
+      return IWORD(TRAP_STACK_UNDERFLOW);
     }
     word num1 = stack.pop();
     word num2 = stack.pop();
-
-    stack.push({.INT = num1.INT + num2.INT});
-    ip.INT++;
+    MATH_OP(+, num1, num2);
+    ip.value.INT++;
     break;
   }
   case SUB_INST: {
     if (stack.top - 1 < 0) {
-      return {.INT = TRAP_STACK_UNDERFLOW};
+      return IWORD(TRAP_STACK_UNDERFLOW);
     }
     word num1 = stack.pop();
     word num2 = stack.pop();
 
-    stack.push({.INT = num1.INT - num2.INT});
-    ip.INT++;
+    MATH_OP(-, num1, num2);
+    ip.value.INT++;
     break;
   }
   case MUL_INST: {
     if (stack.top - 1 < 0) {
-      return {.INT = TRAP_STACK_UNDERFLOW};
+      return IWORD(TRAP_STACK_UNDERFLOW);
     }
     word num1 = stack.pop();
     word num2 = stack.pop();
 
-    stack.push({.INT = num1.INT * num2.INT});
-    ip.INT++;
+    MATH_OP(*, num1, num2);
+    ip.value.INT++;
     break;
   }
   case DIV_INST: {
     if (stack.top - 1 < 0) {
-      return {.INT = TRAP_STACK_UNDERFLOW};
+      return IWORD(TRAP_STACK_UNDERFLOW);
     }
     word num1 = stack.pop();
     word num2 = stack.pop();
 
-    if (num2.INT <= 0) {
-      return {.INT = TRAP_DIVIDE_ZERO};
+    if (num2.value.INT <= 0) {
+      return IWORD(TRAP_DIVIDE_ZERO);
     }
-    stack.push({.INT = num1.INT / num2.INT});
-    ip.INT++;
+    MATH_OP(/, num1, num2);
+    ip.value.INT++;
     break;
   }
   case EQ_INST: {
     if (stack.top - 1 < 0) {
-      return {.INT = TRAP_STACK_UNDERFLOW};
+      return IWORD(TRAP_STACK_UNDERFLOW);
     }
     word e1 = stack.pop();
     word e2 = stack.pop();
-    if (e1.INT == e2.INT) {
-      stack.push({.INT = 0});
-    } else {
-      stack.push({.INT = 1});
-    }
+    COMP_OP(==, e1, e2);
 
-    ip.INT++;
+    ip.value.INT++;
     break;
   }
   case N_EQ_INST: {
     if (stack.top - 1 < 0) {
-      return {.INT = TRAP_STACK_UNDERFLOW};
+      return IWORD(TRAP_STACK_UNDERFLOW);
     }
     word e1 = stack.pop();
     word e2 = stack.pop();
-    if (e1.INT != e2.INT) {
-      stack.push({.INT = 0});
-    } else {
-      stack.push({.INT = 1});
-    }
+    COMP_OP(!=, e1, e2);
 
-    ip.INT++;
+    ip.value.INT++;
     break;
   }
   case JMP_INST: {
-    if (in.params[0].INT < 0 || in.params[0].INT >= (int)program.size()) {
-      return {.INT = TRAP_BAD_JUMP};
+    if (in.params[0].value.INT < 0 ||
+        in.params[0].value.INT >= (int)program.size()) {
+      return IWORD(TRAP_BAD_JUMP);
     }
 
     // If equal jump
-    if (in.flags[0].INT == 1) {
+    if (in.flags[0].value.INT == 1) {
       if (stack.top - 1 < 0) {
-        return {.INT = TRAP_STACK_UNDERFLOW};
+        return IWORD(TRAP_STACK_UNDERFLOW);
       }
       word e1 = stack.pop();
-      if (e1.INT != 0) {
-        ip.INT++;
+      if (e1.value.INT != 0) {
+        ip.value.INT++;
         break;
       }
-    } else if (in.flags[0].INT == 0) {
+    } else if (in.flags[0].value.INT == 0) {
     } else {
-      return {.INT = TRAP_UNKNOWN_FLAG};
+      return IWORD(TRAP_UNKNOWN_FLAG);
     }
 
     last_jmp = ip;
     ip = in.params[0];
-    jump_count.INT++;
+    jump_count.value.INT++;
     break;
   }
   case GET_LOCAL_INST: {
-    int addr = in.params[0].INT + 1;
-    int length = stack.op_stack[in.params[0].INT].INT;
+    int addr = in.params[0].value.INT + 1;
+    int length = stack.op_stack[in.params[0].value.INT].value.INT;
     for (int i = addr; i < addr + length; i++) {
       stack.push(stack.op_stack[i]);
     }
     stack.push(IWORD(length));
-    ip.INT++;
+    ip.value.INT++;
     break;
   }
   case LOAD_LOCAL_INST: {
     if (stack.top == -1) {
-      return {.INT = TRAP_STACK_UNDERFLOW};
+      return IWORD(TRAP_STACK_UNDERFLOW);
     }
-    if (in.params[0].INT == 0) {
+    if (in.params[0].value.INT == 0) {
       word w = stack.pop();
       int addr = stack.alloc_loc(1);
       stack.push_loc(IWORD(addr + 1), w);
     } else {
-      int addr = stack.alloc_loc(in.params[0].INT) + 1;
-      int length = in.params[0].INT;
+      int addr = stack.alloc_loc(in.params[0].value.INT) + 1;
+      int length = in.params[0].value.INT;
       word val;
       for (int i = 0; i < length; i++) {
         val = stack.pop();
@@ -190,14 +182,14 @@ word Worms::exec() {
       }
       stack.push_loc(IWORD(addr + length), val);
     }
-    ip.INT++;
+    ip.value.INT++;
     break;
   }
   }
-  return {.INT = TRAP_OK};
+  return IWORD(TRAP_OK);
 }
 string Worms::debug(word trap) {
-  switch (trap.INT) {
+  switch (trap.value.INT) {
   case TRAP_STACK_OVERFLOW:
     return "TRAP_STACK_OVERFLOW";
   case TRAP_STACK_UNDERFLOW:
@@ -217,7 +209,7 @@ string Worms::debug(word trap) {
 void Worms::run() {
   while (!halted) {
     if (full_trace) {
-      program.at(ip.INT).debug(ip);
+      program.at(ip.value.INT).debug(ip);
     }
     word status = exec();
     if (full_trace) {
@@ -225,17 +217,18 @@ void Worms::run() {
       stack.op_stdout_dump();
       cout << "\n==============================\n\n";
     }
-    if (jump_count.INT == 60) {
-      status = {.INT = TRAP_MAXIMUM_JUMP_STACK_EXCEEDED};
+    if (jump_count.value.INT == 60) {
+      status = IWORD(TRAP_MAXIMUM_JUMP_STACK_EXCEEDED);
       ip = last_jmp;
     }
-    if (last_jmp.INT >= 0 && ip.INT > last_jmp.INT) {
-      last_jmp.INT = -1;
-      jump_count.INT = 0;
+    if (last_jmp.value.INT >= 0 && ip.value.INT > last_jmp.value.INT) {
+      last_jmp.value.INT = -1;
+      jump_count.value.INT = 0;
     }
-    if (status.INT != TRAP_OK) {
-      cout << debug(status) << " AT ADDRESS " << ip.INT << ": WITH OPCODE "
-           << program.at(ip.INT).opcode.INT << endl;
+    if (status.value.INT != TRAP_OK) {
+      cout << debug(status) << " AT ADDRESS " << ip.value.INT
+           << ": WITH OPCODE " << program.at(ip.value.INT).opcode.value.INT
+           << endl;
       break;
     }
   }
