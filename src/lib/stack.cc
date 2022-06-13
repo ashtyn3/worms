@@ -29,7 +29,7 @@ void Stack_frame::op_stdout_dump() {
     cout << "  [empty]" << endl;
     return;
   }
-  for (int i = 0; i < op_top + 2; i++) {
+  for (int i = 0; op_stack[i].t_flag != -1; i++) {
     cout << "  " << i << ": " << GET_VALUE(op_stack[i]) << endl;
   }
 }

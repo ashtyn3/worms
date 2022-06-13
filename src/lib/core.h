@@ -13,7 +13,7 @@ union W_value {
 
 struct word {
   W_value value;
-  int t_flag;
+  int t_flag = -1;
 };
 #define STACK_SIZE 8000
 
