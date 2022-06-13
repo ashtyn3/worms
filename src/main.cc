@@ -21,8 +21,8 @@ int main() {
   //                      HALT};
   // Inst add = {.opcode = IWORD(ADD_INST),
   //             .flags = {IWORD(0), IWORD(0), IWORD(4)}};
-  vector<Inst> prog = {PUSH({FWORD(0.1)}), PUSH({FWORD(0.1)}), ADD(IWORD_8(4)),
-                       HALT};
+  vector<Inst> prog = {PUSH({FWORD(0.1)}), PUSH({FWORD(0.1)}),
+                       LOAD_LOCAL({IWORD(2)}), HALT};
   Worms *hi = new Worms;
   hi->full_trace = true;
   hi->load_program(prog);

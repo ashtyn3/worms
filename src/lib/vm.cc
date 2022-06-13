@@ -180,7 +180,6 @@ word Worms::exec() {
         int index = addr + i;
         stack.push_loc(IWORD(index), val);
       }
-      stack.push_loc(IWORD(addr + length), val);
     }
     ip.value.INT++;
     break;
