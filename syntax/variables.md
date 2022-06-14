@@ -1,10 +1,8 @@
 ---
-description: Learn the syntax of Brok.
+description: Learn the syntax of Variables.
 ---
 
-# Syntax
-
-## Variables
+# Variables
 
 Broks' variables are pretty similar to other programming languages, but all variable names must start with a lowercase letter.
 
