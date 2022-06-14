@@ -10,5 +10,13 @@ $$
 v \rightarrow T = D.
 $$
 
-​This syntax is common across most statements in Brok. The statement starts $$v$$(take notice that v is lower case and not upper-case), which is the name. Brok then uses $$\rightarrow$$to indicate that the tokens following will be  $$v$$'s type. You can think of this like $$v$$ returns the type of $$T$$. Finally, $$D$$ repersents the value of v with respect to type $$T$$.&#x20;
+​This syntax is common across most statements in Brok. The statement starts $$v$$(take notice that v is lower case and not upper-case), which is the name. Brok then uses $$\rightarrow$$to indicate that the tokens following will be  $$v$$'s type. You can think of this like $$v$$ returns the type of $$T$$. Finally, $$D$$ represents the value of v with respect to type $$T$$.&#x20;
+
+A code example would be the following:
+
+```
+y -> Int = 1;
+```
+
+Like other languages use the $$;$$symbol to end statements, Brok uses a $$"."$$to end statements. This must punctuation must be included in statements or else you will receive a parsing error.&#x20;
 
