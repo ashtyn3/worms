@@ -18,6 +18,7 @@ enum {
   N_EQ_INST,
   GET_LOCAL_INST,
   LOAD_LOCAL_INST,
+  FREE_LOCAL_INST,
 };
 
 #define PUSH(value)                                                            \
@@ -56,6 +57,9 @@ enum {
 
 #define GET_LOCAL(value)                                                       \
   { .opcode = IWORD(GET_LOCAL_INST), .params = value }
+
+#define FREE_LOCAL(value)                                                      \
+  { .opcode = IWORD(FREE_LOCAL_INST), .params = value }
 
 #define LOAD_LOCAL(size)                                                       \
   { .opcode = IWORD(LOAD_LOCAL_INST), .params = size }
@@ -105,6 +109,9 @@ struct Inst {
       break;
     case LOAD_LOCAL_INST:
       cout << "<" << opcode.value.INT << "> LOAD_LOCAL";
+      break;
+    case FREE_LOCAL_INST:
+      cout << "<" << opcode.value.INT << "> FREE_LOCAL";
       break;
     }
     cout << "\n  FLAGS: ";

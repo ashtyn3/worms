@@ -163,6 +163,12 @@ word Worms::exec() {
     ip.value.INT++;
     break;
   }
+  case FREE_LOCAL_INST: {
+    int addr = in.params[0].value.INT;
+    stack.pop_loc(addr);
+    ip.value.INT++;
+    break;
+  }
   case LOAD_LOCAL_INST: {
     if (stack.top == -1) {
       return IWORD(TRAP_STACK_UNDERFLOW);
