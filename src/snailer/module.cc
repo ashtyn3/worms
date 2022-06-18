@@ -166,6 +166,7 @@ Inst Fn_call_block::raw_instruction() {
 
   if (params.size() < 2 && p_size.value.INT8 == 1) {
     cout << "BAD ARGUMENT LENGTH WITH PARAM MODE SET TO 1" << endl;
+    exit(1);
   }
   for (int i = 0; i < p_size.value.INT + 1; i++) {
     inst.params[i] = params[i]->raw_instruction().opcode;

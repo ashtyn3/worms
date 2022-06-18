@@ -43,7 +43,7 @@ int main() {
   Value *v2 = new Value();
   v2->set_Integer(20);
 
-  c->add_param(v2);
+  // c->add_param(v2);
 
   fn->add_block(c);
 
