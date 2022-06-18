@@ -3,10 +3,7 @@
 #include <iostream>
 #include <random>
 
-int Fn_block::make_local(string name, value_t type) {
-  heap_model[name] = type;
-  return 0;
-}
+int Fn_block::make_local(string name, value_t type) { return 0; }
 
 string t_string(value_t t) {
   switch (t) {

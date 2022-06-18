@@ -32,24 +32,21 @@ int main() {
   // fn->add_param_sig("a", snailer_float64_t);
 
   Fn_call_block *c = new Fn_call_block("hi", true);
-  c->p_size = IWORD(1);
+  // c->p_size = IWORD(1);
 
   Value *v = new Value();
   // v->set_Integer(9007199254740991);
-  v->set_float(9.9);
+  v->set_Integer(20);
 
   c->add_param(v);
 
-  Value *v2 = new Value();
-  v2->set_Integer(20);
-
-  // c->add_param(v2);
-
   fn->add_block(c);
 
-  auto in = c->raw_instruction();
-  uint8_t *bit_code = produce_bytes(&in);
-  Inst *i = reproduce_inst(bit_code);
+  // auto in = c->raw_instruction();
+  // uint8_t *bit_code = produce_bytes(&in);
+  // Inst *i = reproduce_inst(bit_code);
 
-  cout << i->params[0].value.FLOAT << endl;
+  write(proc_module(mod));
+
+  // cout << (int)i->params[0].value.INT16 << endl;
 }

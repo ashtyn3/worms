@@ -1,5 +1,6 @@
 #include "./byte_gen.h"
 #include "./snailer_leb128.h"
+#include "fstream"
 #include <ieee754.h>
 
 uint8_t *produce_bytes(Inst *inst) {
@@ -17,7 +18,6 @@ uint8_t *produce_bytes(Inst *inst) {
     }
     word w = inst->params[i];
 
-    cout << inst->params[i].t_flag << endl;
     uint8_t buffer[10] = {};
 
     switch (w.t_flag) {
@@ -79,6 +79,7 @@ Inst *reproduce_inst(uint8_t *b) {
       int index = (4 + (i * length)) + j;
       bytes[j] = b[index + 1];
     }
+    in->params[i].t_flag = t;
     switch (t) {
     case 4: {
       IEEE_754 un;
@@ -92,7 +93,7 @@ Inst *reproduce_inst(uint8_t *b) {
     case 3: {
       int64_t val;
       bfs::DecodeLeb128(bytes, length, &val);
-      in->params[i].value.INT8 = static_cast<int8_t>(val);
+      in->params[i].value.INT16 = static_cast<int8_t>(val);
       break;
     }
     case 2: {
@@ -115,4 +116,34 @@ Inst *reproduce_inst(uint8_t *b) {
   }
 
   return in;
+}
+
+vector<uint8_t> proc_module(Module *mod) {
+  vector<uint8_t> byte_stream;
+  for (int i = 0; i < (int)mod->blocks.size(); i++) {
+
+    Block *b = mod->blocks[i];
+
+    if (b->type == snailer_fn_block_t) {
+      Module *M = new Module();
+      Fn_block *fn = (Fn_block *)b;
+      M->blocks = fn->body;
+      auto proced = proc_module(M);
+      byte_stream.insert(byte_stream.begin(), proced.begin(), proced.end());
+    } else {
+      Inst inst = b->raw_instruction();
+      uint8_t *bytes = produce_bytes(&inst);
+
+      for (int i = 0; i < 15; i++) {
+        byte_stream.push_back(bytes[i]);
+      }
+    }
+  }
+  return byte_stream;
+}
+
+void write(vector<uint8_t> v) {
+  ofstream fout("worms.out", ios::out | ios::binary);
+  fout.write((char *)&v[0], v.size() * sizeof(uint8_t));
+  fout.close();
 }
