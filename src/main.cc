@@ -46,7 +46,9 @@ int main() {
   // uint8_t *bit_code = produce_bytes(&in);
   // Inst *i = reproduce_inst(bit_code);
 
-  write(proc_module(mod));
+  auto gen = new snailer_byte_generator(mod);
+  gen->proc_module();
+  gen->write("worms.out");
 
   // cout << (int)i->params[0].value.INT16 << endl;
 }
