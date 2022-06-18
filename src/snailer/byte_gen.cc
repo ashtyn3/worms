@@ -3,7 +3,7 @@
 #include "fstream"
 #include <ieee754.h>
 
-uint8_t *produce_bytes(Inst *inst) {
+uint8_t *snailer_byte_generator::produce_bytes(Inst *inst) {
   static uint8_t bytes[15] = {};
   bytes[0] = inst->opcode.value.INT8;
 
@@ -55,7 +55,7 @@ uint8_t *produce_bytes(Inst *inst) {
   return bytes;
 }
 
-Inst *reproduce_inst(uint8_t *b) {
+Inst *snailer_byte_generator::reproduce_inst(uint8_t *b) {
   auto in = new Inst;
 
   in->opcode = IWORD_8((int8_t)b[0]);
@@ -118,8 +118,7 @@ Inst *reproduce_inst(uint8_t *b) {
   return in;
 }
 
-vector<uint8_t> proc_module(Module *mod) {
-  vector<uint8_t> byte_stream;
+void snailer_byte_generator::proc_module() {
   for (int i = 0; i < (int)mod->blocks.size(); i++) {
 
     Block *b = mod->blocks[i];
@@ -128,22 +127,22 @@ vector<uint8_t> proc_module(Module *mod) {
       Module *M = new Module();
       Fn_block *fn = (Fn_block *)b;
       M->blocks = fn->body;
-      auto proced = proc_module(M);
-      byte_stream.insert(byte_stream.begin(), proced.begin(), proced.end());
+      auto g = new snailer_byte_generator(M);
+      g->proc_module();
+      bytecode.insert(bytecode.begin(), g->bytecode.begin(), g->bytecode.end());
     } else {
       Inst inst = b->raw_instruction();
       uint8_t *bytes = produce_bytes(&inst);
 
       for (int i = 0; i < 15; i++) {
-        byte_stream.push_back(bytes[i]);
+        bytecode.push_back(bytes[i]);
       }
     }
   }
-  return byte_stream;
 }
 
-void write(vector<uint8_t> v) {
-  ofstream fout("worms.out", ios::out | ios::binary);
-  fout.write((char *)&v[0], v.size() * sizeof(uint8_t));
+void snailer_byte_generator::write(string name) {
+  ofstream fout(name, ios::out | ios::binary);
+  fout.write((char *)&bytecode[0], bytecode.size() * sizeof(uint8_t));
   fout.close();
 }

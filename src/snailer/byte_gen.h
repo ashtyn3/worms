@@ -8,11 +8,16 @@ union IEEE_754 {
   float fp;
 };
 
-Inst *reproduce_inst(uint8_t *inst);
+class snailer_byte_generator {
+  Inst *reproduce_inst(uint8_t *inst);
+  uint8_t *produce_bytes(Inst *inst);
+  Module *mod;
 
-uint8_t *produce_bytes(Inst *inst);
-
-vector<uint8_t> proc_module(Module *mod);
-void write(vector<uint8_t>);
+public:
+  vector<uint8_t> bytecode;
+  snailer_byte_generator(Module *m) : mod(m){};
+  void proc_module();
+  void write(string name);
+};
 
 #endif
