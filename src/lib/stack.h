@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef STACK_H
+#define STACK_H
 #include "core.h"
 #include <iostream>
 #include <map>
@@ -35,3 +36,4 @@ struct Call_stack {
   void pop_frame();
   int top = -1;
 };
+#endif

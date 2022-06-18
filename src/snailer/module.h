@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef MODULE_H
+#define MODULE_H
+#include "../lib/inst.h"
 #include "val.h"
 #include <map>
 #include <string>
@@ -7,10 +11,17 @@
 using namespace std;
 
 enum value_t {
+  snailer_int64_t,
+  snailer_int32_t,
+  snailer_int16_t,
+  snailer_int8_t,
+  snailer_float64_t,
   snailer_null_t,
   snailer_pointer_t,
-  snailer_int64_t,
-  snailer_float64_t
+};
+enum block_t {
+  snailer_fn_block_t,
+  snailer_fn_call_block_t,
 };
 
 class Fn_block;
@@ -27,15 +38,16 @@ public:
   virtual ~Block() = default;
   // int get_pointer_to();
   // int get_size();
-  // int set_size();
+  virtual Inst raw_instruction(){};
   virtual string produce(){};
+  block_t type;
   // virtual int make_local(string name, value_t type) = 0;
   // virtual void add_block(Block *b) = 0;
 };
 
 class Module {
 public:
-  map<int, Block *> blocks;
+  vector<Block *> blocks;
   Fn_block *make_fn(string, value_t);
 };
 
@@ -49,16 +61,21 @@ public:
   Float s_float;
 
   Ptr set_ptr(int ref);
-  Int set_Integer(int i);
+
+  Int set_Integer(int64_t i);
+  Int set_Integer32(int32_t i);
+  Int set_Integer16(int16_t i);
+  Int set_Integer8(int8_t i);
+
   Float set_float(float f);
 
   string produce();
+  Inst raw_instruction();
 };
 class Param : public Block {
+public:
   string name;
   value_t val_t;
-
-public:
   Param(string name, value_t vt) : name(name), val_t(vt){};
   string produce();
 };
@@ -84,7 +101,11 @@ public:
   string name;
   bool is_builtin;
   vector<Value *> params;
-  Fn_call_block(string name, bool builtin) : name(name), is_builtin(builtin){};
+  Fn_call_block(string name, bool builtin) : name(name), is_builtin(builtin) {
+    type = snailer_fn_call_block_t;
+  };
   string produce();
+  Inst raw_instruction();
   void add_param(Value *p);
 };
+#endif

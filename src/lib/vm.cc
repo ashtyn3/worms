@@ -176,9 +176,11 @@ word Worms::exec() {
     if (in.params[0].value.INT == 0) {
       word w = stack.pop();
       int addr = stack.alloc_loc(1);
+      stack.push(IWORD(addr));
       stack.push_loc(IWORD(addr + 1), w);
     } else {
       int addr = stack.alloc_loc(in.params[0].value.INT) + 1;
+      stack.push(IWORD(addr - 1));
       int length = in.params[0].value.INT;
       word val;
       for (int i = 0; i < length; i++) {

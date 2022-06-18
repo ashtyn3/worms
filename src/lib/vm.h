@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef VM_H
+#define VM_H
 #include "core.h"
 #include "inst.h"
 #include "stack.h"
@@ -19,3 +20,4 @@ struct Worms {
   string debug(word trap);
   void run();
 };
+#endif

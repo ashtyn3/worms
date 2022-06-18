@@ -1,9 +1,10 @@
 #include <iostream>
 
-#include "lib/inst.h"
-#include "lib/vm.h"
-#include "snailer/module.cc"
+// #include "lib/inst.h"
+// #include "lib/vm.h"
+#include "snailer/byte_gen.h"
 #include "snailer/module.h"
+#include "src/lib/core.h"
 #include <vector>
 
 using namespace std;
@@ -21,30 +22,23 @@ int main() {
   //                      HALT};
   // Inst add = {.opcode = IWORD(ADD_INST),
   //             .flags = {IWORD(0), IWORD(0), IWORD(4)}};
-  vector<Inst> prog = {PUSH({FWORD(0.1)}),
-                       PUSH({FWORD(0.1)}),
-                       ADD(IWORD(4)),
-                       LOAD_LOCAL({}),
-                       GET_LOCAL({IWORD(0)}),
-                       FREE_LOCAL({IWORD(0)}),
-                       HALT};
-  Worms *hi = new Worms;
-  hi->full_trace = true;
-  hi->load_program(prog);
-  hi->run();
-  // Module *mod = new Module;
-  // Fn_block *fn = mod->make_fn("main", snailer_int64_t);
-  //
+  // Worms *hi = new Worms;
+  // hi->full_trace = true;
+  // hi->load_program(prog);
+  // hi->run();
+  Module *mod = new Module;
+  Fn_block *fn = mod->make_fn("main", snailer_int64_t);
+
   // fn->add_param_sig("a", snailer_float64_t);
   //
-  // Fn_call_block *c = new Fn_call_block("hi", true);
+  Fn_call_block *c = new Fn_call_block("hi", true);
+
+  Value *v = new Value();
+  v->set_float(2.9901);
   //
-  // Value *v = new Value();
-  // v->set_Integer(2);
+  c->add_param(v);
   //
-  // c->add_param(v);
-  //
-  // fn->add_block(c);
-  //
-  // cout << fn->produce() << endl;
+  fn->add_block(c);
+  auto in = c->raw_instruction();
+  cout << produce_bytes(&in)[0] << endl;
 }

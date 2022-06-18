@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef INST_H
+#define INST_H
 #include "core.h"
 #include "iostream"
 using namespace std;
@@ -19,6 +20,7 @@ enum {
   GET_LOCAL_INST,
   LOAD_LOCAL_INST,
   FREE_LOCAL_INST,
+  CALL_INST,
 };
 
 #define PUSH(value)                                                            \
@@ -125,3 +127,4 @@ struct Inst {
     cout << endl;
   }
 };
+#endif

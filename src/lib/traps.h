@@ -1,3 +1,5 @@
+#ifndef TRAP_H
+#define TRAP_H
 enum Traps {
   TRAP_OK,
   TRAP_STACK_OVERFLOW,
@@ -7,3 +9,5 @@ enum Traps {
   TRAP_BAD_JUMP,
   TRAP_MAXIMUM_JUMP_STACK_EXCEEDED
 };
+
+#endif

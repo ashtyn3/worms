@@ -19,6 +19,22 @@ string is_type(int t_flag) {
     return "i64";
   }
 }
+int is_size(word w) {
+  switch (w.t_flag) {
+  case 0:
+    return 64;
+  case 1:
+    return 32;
+  case 2:
+    return 16;
+  case 3:
+    return 8;
+  case 4:
+    return 64;
+  default:
+    return 64;
+  }
+}
 
 string GET_VALUE(word w) {
   int t_flag = w.t_flag;

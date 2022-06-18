@@ -7,8 +7,8 @@ project('worms', 'cpp',
 subdir('./src')
 executable('worms',
            './src/main.cc',
-           install : true, link_with: [vm,traps, core, inst, module],link_args: ['-static'])
+           install : true, link_with: [vm,traps,core, inst, utils,module, byte])
 
 executable('worms_wr',
            './src/wr/wr.cc',
-           install : true, link_with: [lexer, parser], link_args: ['-static', '-g'] )
+           install : true, link_with: [lexer, parser])

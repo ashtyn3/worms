@@ -1,5 +1,7 @@
 #pragma once
 
+#ifndef CORE_H
+#define CORE_H
 #include "stdint.h"
 #include <string>
 
@@ -66,3 +68,4 @@ std::string GET_VALUE(word);
 
 #define FWORD(int)                                                             \
   { .value = {.FLOAT = int}, .t_flag = 4 }
+#endif
