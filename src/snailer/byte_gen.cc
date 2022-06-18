@@ -3,17 +3,22 @@
 #include <ieee754.h>
 
 uint8_t *produce_bytes(Inst *inst) {
-  static uint8_t bytes[64] = {};
-  malloc(sizeof(bytes));
+  static uint8_t bytes[15] = {};
   bytes[0] = inst->opcode.value.INT8;
 
   bytes[1] = inst->flags[0].value.INT8;
   bytes[2] = inst->flags[1].value.INT8;
   bytes[3] = inst->flags[2].value.INT8;
 
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < bytes[3] + 1; i++) {
+    int length = 10;
+    if (inst->flags[2].value.INT8 == 1) {
+      length = 5;
+    }
     word w = inst->params[i];
-    uint8_t buffer[6] = {};
+
+    uint8_t buffer[10] = {};
+
     switch (w.t_flag) {
     case 4:
       IEEE_754 un;
@@ -26,14 +31,21 @@ uint8_t *produce_bytes(Inst *inst) {
     case -1:
       break;
     default:
-      bfs::EncodeLeb128(w.value.INT, buffer, 6);
+      int size = bfs::EncodeLeb128(w.value.INT, buffer, length);
+      if (size == 0 && w.value.INT > 0) {
+        cout << "INTEGER OVERFLOW" << endl;
+      }
       break;
     }
-    // for (int j = 0; j < 6; j++) {
-    //   bytes[j + 4 + (i * 6)] = (int)buffer[j];
-    //   cout << j + 4 + (i * 6) << ": " << (int)buffer[j] << endl;
-    // }
-    // cout << "==========" << endl;
+    // int offset = 0;
+    for (int j = 0; j < length; j++) {
+      int index = (4 + (i * length)) + j;
+      bytes[index] = (int)buffer[j];
+      // offset++;
+    }
+  }
+  for (int i = 0; i < 15; i++) {
+    cout << i << ":" << (int)bytes[i] << endl;
   }
 
   return bytes;

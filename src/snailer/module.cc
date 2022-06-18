@@ -162,7 +162,7 @@ Inst Fn_call_block::raw_instruction() {
 
   inst.flags[0] = IWORD_8(0);
   inst.flags[1] = IWORD_8(0);
-  inst.flags[2] = IWORD_8(0);
+  inst.flags[2] = p_size;
 
   inst.params[0] = params[0]->raw_instruction().opcode;
 

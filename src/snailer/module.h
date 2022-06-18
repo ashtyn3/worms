@@ -35,9 +35,9 @@ class Block {
   Fn_call_block *call;
 
 public:
+  word p_size = IWORD_8(0);
   virtual ~Block() = default;
   // int get_pointer_to();
-  // int get_size();
   virtual Inst raw_instruction(){};
   virtual string produce(){};
   block_t type;

@@ -30,14 +30,16 @@ int main() {
   Fn_block *fn = mod->make_fn("main", snailer_int64_t);
 
   // fn->add_param_sig("a", snailer_float64_t);
-  //
+
   Fn_call_block *c = new Fn_call_block("hi", true);
 
   Value *v = new Value();
-  v->set_float(2.9901);
-  //
+  v->set_Integer(9007199254740991);
+  // v->set_Integer(900);
+
   c->add_param(v);
-  //
+  // c->p_size = IWORD(1);
+
   fn->add_block(c);
   auto in = c->raw_instruction();
   cout << produce_bytes(&in)[0] << endl;

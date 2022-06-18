@@ -69,7 +69,7 @@ enum {
 struct Inst {
   word opcode;
   word flags[3];
-  word params[5];
+  word params[2];
   void debug(word ip) {
     cout << ip.value.INT << ": ";
     switch (opcode.value.INT) {
