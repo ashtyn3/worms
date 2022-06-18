@@ -48,9 +48,9 @@ uint8_t *snailer_byte_generator::produce_bytes(Inst *inst) {
       // offset++;
     }
   }
-  for (int i = 0; i < 15; i++) {
-    cout << i << ":" << (int)bytes[i] << endl;
-  }
+  // for (int i = 0; i < 15; i++) {
+  //   cout << i << ":" << (int)bytes[i] << endl;
+  // }
 
   return bytes;
 }
