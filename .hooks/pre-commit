@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# import subprocess
+# import os
+#
+#
+# subprocess.run(["pwd"])
+# print("Running pre-commit tasks:")
+# add_license = os.system("addlicense -c 'Ashtyn Morel-Blake' -l mit ./run ./src/**/*.cc ./src/**/*.h")
+# if add_license == 0:
+#     print("  - Ran license check on files.")
+
+# format = subprocess.run(["clang-format", "-i",  "./**/*.cc", "./**/*.h"])
+# if format.returncode == 0:
+#     print("  - Ran formatter on files.")
+
+
+echo "Running pre-commit tasks:"
+
+addlicense -c 'Ashtyn Morel-Blake' -l mit ./run $(find . -type f -name \*.h) $(find . -type f -name \*.cc)
+echo "  - Ran license check on files."
+
+clang-format -i $(find . -type f -name \*.h) $(find . -type f -name \*.cc)
+echo "  - Ran formatter on files."
