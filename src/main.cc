@@ -64,6 +64,10 @@ int main() {
 
     fn->add_block(c);
 
+    Fn_call_block *p = new Fn_call_block("pop", true);
+
+    fn->add_block(p);
+
     Fn_call_block *h = new Fn_call_block("exit", true);
 
     fn->add_block(h);

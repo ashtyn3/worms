@@ -43,7 +43,7 @@ word Worms::exec() {
         break;
     }
     case POP_INST: {
-        if (stack.top - 1 < 0) {
+        if (stack.top < 0) {
             return IWORD(TRAP_STACK_UNDERFLOW);
         }
         stack.pop();
