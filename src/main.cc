@@ -27,18 +27,24 @@ int main() {
   // hi->load_program(prog);
   // hi->run();
   Module *mod = new Module;
-  Fn_block *fn = mod->make_fn("main", snailer_int64_t);
+  Fn_block *fn = mod->make_fn("start", snailer_int64_t);
 
   // fn->add_param_sig("a", snailer_float64_t);
 
   Fn_call_block *c = new Fn_call_block("push", true);
-  // c->p_size = IWORD(1);
+  c->p_size = IWORD(1);
 
   Value *v = new Value();
   // v->set_Integer(9007199254740991);
-  v->set_Integer(20);
+  v->set_Integer(2000);
 
   c->add_param(v);
+
+  Value *v2 = new Value();
+  // v->set_Integer(9007199254740991);
+  v2->set_float(2.101);
+
+  c->add_param(v2);
 
   fn->add_block(c);
 

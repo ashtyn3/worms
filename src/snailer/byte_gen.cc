@@ -126,11 +126,14 @@ void snailer_byte_generator::proc_module() {
     if (b->type == snailer_fn_block_t) {
       Module *M = new Module();
       Fn_block *fn = (Fn_block *)b;
-      symbol_table[fn->name] = pair(fn, bytecode.size() - 1);
+      symbol_table[fn->name] = pair(fn, bytecode.size());
+      if (fn->name == "start") {
+        bytecode[0] = bytecode.size() + 1;
+      }
       M->blocks = fn->body;
       auto g = new snailer_byte_generator(M);
       g->proc_module();
-      bytecode.insert(bytecode.begin(), g->bytecode.begin(), g->bytecode.end());
+      bytecode.insert(bytecode.end(), g->bytecode.begin(), g->bytecode.end());
     } else if (b->type == snailer_fn_call_block_t) {
       Fn_call_block *fn = (Fn_call_block *)b;
 
@@ -153,6 +156,9 @@ void snailer_byte_generator::proc_module() {
 }
 
 void snailer_byte_generator::write(string name) {
+  if (!symbol_table.contains("start")) {
+    cout << "COMPILED LIBRARY" << endl;
+  }
   ofstream fout(name, ios::out | ios::binary);
   fout.write((char *)&bytecode[0], bytecode.size() * sizeof(uint8_t));
   fout.close();
