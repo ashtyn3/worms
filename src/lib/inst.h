@@ -6,7 +6,7 @@
 using namespace std;
 
 enum {
-  PUSH_INST,
+  PUSH_INST = 1,
   POP_INST,
   HALT_INST,
   DUP_INST,

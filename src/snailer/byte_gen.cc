@@ -126,12 +126,23 @@ void snailer_byte_generator::proc_module() {
     if (b->type == snailer_fn_block_t) {
       Module *M = new Module();
       Fn_block *fn = (Fn_block *)b;
+      symbol_table[fn->name] = pair(fn, bytecode.size() - 1);
       M->blocks = fn->body;
       auto g = new snailer_byte_generator(M);
       g->proc_module();
       bytecode.insert(bytecode.begin(), g->bytecode.begin(), g->bytecode.end());
-    } else {
+    } else if (b->type == snailer_fn_call_block_t) {
+      Fn_call_block *fn = (Fn_call_block *)b;
+
+      if (!symbol_table.contains(fn->name)) {
+        cout << "BAD NAME: " << fn->name << endl;
+        exit(-1);
+      }
+
       Inst inst = b->raw_instruction();
+      if (fn->is_builtin) {
+        inst.opcode = IWORD_8((int8_t)symbol_table[fn->name].second);
+      }
       uint8_t *bytes = produce_bytes(&inst);
 
       for (int i = 0; i < 15; i++) {

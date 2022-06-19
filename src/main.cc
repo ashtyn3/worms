@@ -31,7 +31,7 @@ int main() {
 
   // fn->add_param_sig("a", snailer_float64_t);
 
-  Fn_call_block *c = new Fn_call_block("hi", true);
+  Fn_call_block *c = new Fn_call_block("push", true);
   // c->p_size = IWORD(1);
 
   Value *v = new Value();
