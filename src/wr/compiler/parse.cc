@@ -196,10 +196,10 @@ Parse_tok *Parser::parse_end() {
     return p;
 }
 
-void Parser::parse_flag_set() {
-    // Parse_tok *p = new Parse_tok;
-    // p->line = tok.pos.line;
-    // p->type = flag_set_t;
+Parse_tok *Parser::parse_flag_set() {
+    Parse_tok *p = new Parse_tok;
+    p->line = tok.pos.line;
+    p->type = flag_set_t;
 
     Flags *f = new Flags;
 
@@ -208,7 +208,8 @@ void Parser::parse_flag_set() {
 
     while (tok.type != END) {
         if (tok.type == COMMA) {
-            f->flags[name] = val;
+            f->index = name;
+            f->value = val;
             next_tok();
         } else if (tok.type == EQUAL) {
             next_tok();
@@ -219,17 +220,14 @@ void Parser::parse_flag_set() {
             next_tok();
         }
     }
-    if (!name.empty() && f->flags.size() == 0) {
-        f->flags[name] = val;
+    if (!name.empty()) {
+        f->index = name;
+        f->value = val;
     }
     next_tok();
-    // p->flags = f;
-    if (last->flags) {
-        last->flags->flags[name] = val;
-    } else {
-        last->flags = f;
-    }
-    // return p;
+    p->flags = f;
+
+    return p;
 }
 Parse_tok *Parser::run() {
     Parse_tok *t;

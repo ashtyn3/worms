@@ -44,7 +44,8 @@ class Function_call {
 
 class Flags {
   public:
-    map<string, uint8_t> flags;
+    string index;
+    uint8_t value;
 };
 
 class Return {
