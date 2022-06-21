@@ -231,16 +231,13 @@ Parse_tok *Parser::parse_flag_set() {
 }
 Parse_tok *Parser::run() {
     Parse_tok *t;
-    if (tok.type == AT) {
-        parse_flag_set();
-        while (tok.type == AT) {
-            parse_flag_set();
-        }
-    }
+
     if (tok.token == ";") {
         t = parse_end();
     } else if (tok.token == "fn") {
         t = parse_fn();
+    } else if (tok.type == AT) {
+        t = parse_flag_set();
     } else if ((tok.type == IDENT || tok.type == NUM || tok.type == FLOAT) &&
                peek().type == BUILTIN) {
         t = parse_param();
