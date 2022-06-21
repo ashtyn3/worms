@@ -177,8 +177,8 @@ Inst Fn_call_block::raw_instruction() {
     Inst inst;
     inst.opcode = IWORD_8(CALL_INST);
 
-    inst.flags[0] = IWORD_8(0);
-    inst.flags[1] = IWORD_8(0);
+    inst.flags[0] = flags[0];
+    inst.flags[1] = flags[1];
     inst.flags[2] = p_size;
 
     if (params.size() < 2 && p_size.value.INT8 == 1) {

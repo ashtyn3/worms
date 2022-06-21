@@ -85,7 +85,6 @@ word Worms::exec() {
         }
         word num1 = stack.pop();
         word num2 = stack.pop();
-        cout << num1.t_flag << endl;
         MATH_OP(+, num1, num2);
         ip.value.INT++;
         break;

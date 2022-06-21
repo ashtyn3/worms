@@ -57,11 +57,13 @@ class Block {
     Fn_call_block *call;
 
   public:
+    word flags[3];
     word p_size = IWORD_8(0);
     virtual ~Block() = default;
     // int get_pointer_to();
     virtual Inst raw_instruction(){};
     virtual string produce(){};
+
     block_t type;
     // virtual int make_local(string name, value_t type) = 0;
     // virtual void add_block(Block *b) = 0;

@@ -58,12 +58,13 @@ int main() {
 
     Value *v = new Value();
     // v->set_Integer(9007199254740991);
-    v->set_float(20.2);
+    v->set_float(2.2);
     c->add_param(v);
     fn->add_block(c);
     fn->add_block(c);
 
     Fn_call_block *a = new Fn_call_block("add", true);
+    a->flags[0] = IWORD_8(4);
     fn->add_block(a);
 
     Fn_call_block *al = new Fn_call_block("alloc", true);
@@ -83,7 +84,7 @@ int main() {
 
     auto sn_load = new snailer_byte_loader(gen->bytecode);
     Worms *hi = new Worms;
-    // hi->full_trace = true;
+    hi->full_trace = true;
     hi->load_program(sn_load->instructions);
     hi->run();
     // cout << (int)i->params[0].value.INT16 << endl;
