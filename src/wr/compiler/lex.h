@@ -48,7 +48,9 @@ enum Lex_tok_type {
     R_PAREN,
     L_PAREN,
     END,
-    COMMA
+    COMMA,
+    AT,
+    EQUAL
 };
 
 class Lexer {

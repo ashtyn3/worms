@@ -23,6 +23,8 @@
 #pragma once
 
 #include "lex.h"
+#include <map>
+#include <memory>
 
 class Parse_tok;
 class Function {
@@ -39,6 +41,12 @@ class Function_call {
     string ret_type;
     vector<Parse_tok *> params;
 };
+
+class Flags {
+  public:
+    map<string, uint8_t> flags;
+};
+
 class Return {
   public:
     bool is;
@@ -53,14 +61,22 @@ class End {
     bool is;
 };
 
-enum Parse_type { param_t, function_t, function_c_t, function_r_t, end_t };
+enum Parse_type {
+    param_t,
+    function_t,
+    function_c_t,
+    function_r_t,
+    end_t,
+    flag_set_t
+};
 class Parse_tok {
   public:
     int line;
-    int type;
+    Parse_type type;
     Param *param;
     Function *function;
     Function_call *fn_call;
     Return *fn_return;
-    End end;
+    Flags *flags;
+    End *end;
 };

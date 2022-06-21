@@ -59,7 +59,6 @@ int main(int argc, char *argv[]) {
     //   p_toks.push_back(p.run());
     // }
     p_toks = p.while_run();
-    cout << p_toks[0]->function->ret_type << endl;
 
     file.close();
     return 0;

@@ -48,11 +48,27 @@ void Lexer::Lex() {
                 name.push_back(ch);
                 next_ch();
             }
-            next_ch();
+            // next_ch();
             toks.push_back({.pos = {.start_col = start,
                                     .end_col = index,
                                     .line = line_num + 1},
                             .type = BUILTIN,
+                            .token = name});
+        } else if (ch == '@' && isalpha(peek())) {
+            int start = index;
+            next_ch();
+            string name;
+            name.push_back(ch);
+            next_ch();
+            while (isalnum(ch)) {
+                name.push_back(ch);
+                next_ch();
+            }
+            next_ch();
+            toks.push_back({.pos = {.start_col = start,
+                                    .end_col = index,
+                                    .line = line_num + 1},
+                            .type = AT,
                             .token = name});
         } else if (isdigit(ch)) {
             int start = index;
@@ -67,7 +83,7 @@ void Lexer::Lex() {
                 digit.push_back(ch);
                 next_ch();
             }
-            next_ch();
+            // next_ch();
             if (is_float) {
                 toks.push_back({.pos = {.start_col = start,
                                         .end_col = index,
@@ -86,10 +102,14 @@ void Lexer::Lex() {
             string name;
             name.push_back(ch);
             next_ch();
-            while (isalnum(ch)) {
+            while (1) {
+                if (!isalnum(ch)) {
+                    break;
+                }
                 name.push_back(ch);
                 next_ch();
             }
+            // cout << name << endl;
             if (name == "call" || name == "fn" || name == "end" ||
                 name == "i32" || name == "i64" || name == "f32" ||
                 name == "f64" || name == "ret") {
@@ -133,6 +153,13 @@ void Lexer::Lex() {
                                     .line = line_num + 1},
                             .type = COMMA,
                             .token = ","});
+        } else if (ch == '=') {
+            next_ch();
+            toks.push_back({.pos = {.start_col = index,
+                                    .end_col = index,
+                                    .line = line_num + 1},
+                            .type = EQUAL,
+                            .token = "="});
         }
     }
 }

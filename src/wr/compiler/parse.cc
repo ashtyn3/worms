@@ -22,8 +22,10 @@
 
 #include <iostream>
 
+Parse_tok *last;
+
 void Parser::next_tok() {
-    if (index >= (int)toks.size()) {
+    if (index + 1 >= (int)toks.size()) {
         tok = {.pos = {.start_col = -1, .end_col = -1, .line = -1},
                .type = END,
                .token = "EOF"};
@@ -160,6 +162,7 @@ Parse_tok *Parser::parse_fn_call() {
         fn_call->params = bod_p.while_run();
     }
     p->fn_call = fn_call;
+    // next_tok();
     return p;
 }
 
@@ -177,26 +180,67 @@ Parse_tok *Parser::parse_ret() {
     r->is = true;
 
     p->fn_return = r;
-    next_tok();
     return p;
 }
 Parse_tok *Parser::parse_end() {
     Parse_tok *p = new Parse_tok;
     p->line = tok.pos.line;
-    p->type = function_r_t;
+    p->type = end_t;
 
-    Return *r = new Return;
+    End *r = new End;
     r->is = true;
 
-    p->fn_return = r;
+    p->end = r;
 
+    next_tok();
     return p;
+}
+
+void Parser::parse_flag_set() {
+    // Parse_tok *p = new Parse_tok;
+    // p->line = tok.pos.line;
+    // p->type = flag_set_t;
+
+    Flags *f = new Flags;
+
+    string name;
+    uint8_t val = 0;
+
+    while (tok.type != END) {
+        if (tok.type == COMMA) {
+            f->flags[name] = val;
+            next_tok();
+        } else if (tok.type == EQUAL) {
+            next_tok();
+            val = stoi(tok.token);
+            next_tok();
+        } else {
+            name = tok.token;
+            next_tok();
+        }
+    }
+    if (!name.empty() && f->flags.size() == 0) {
+        f->flags[name] = val;
+    }
+    next_tok();
+    // p->flags = f;
+    if (last->flags) {
+        last->flags->flags[name] = val;
+    } else {
+        last->flags = f;
+    }
+    // return p;
 }
 Parse_tok *Parser::run() {
     Parse_tok *t;
+    if (tok.type == AT) {
+        parse_flag_set();
+        while (tok.type == AT) {
+            parse_flag_set();
+        }
+    }
     if (tok.token == ";") {
         t = parse_end();
-        next_tok();
     } else if (tok.token == "fn") {
         t = parse_fn();
     } else if ((tok.type == IDENT || tok.type == NUM || tok.type == FLOAT) &&
@@ -213,14 +257,16 @@ Parse_tok *Parser::run() {
         exit(1);
         return {};
     }
-
     return t;
 }
 
 vector<Parse_tok *> Parser::while_run() {
-    vector<Parse_tok *> TOKS;
-    while (tok.pos.line != -1 && index < (int)toks.size() && tok.token != ";") {
-        TOKS.push_back(run());
+    while (tok.pos.line != -1 && index < (int)toks.size()) {
+        auto v = run();
+        if (v) {
+            TOKS.push_back(v);
+        }
+        last = TOKS[TOKS.size() - 1];
     }
     return TOKS;
 }
