@@ -1,4 +1,4 @@
 fn start
-    call &push 32 i32; @f1 = 1; @f2 = 2; @f3 = 3;
+    &push 32 i32; @f1 = 1; @f2 = 2; @f3 = 3;
     ret;
 end start;

@@ -58,13 +58,13 @@ int main() {
 
     Value *v = new Value();
     // v->set_Integer(9007199254740991);
-    v->set_float(2.2);
+    v->set_Integer32(2);
     c->add_param(v);
     fn->add_block(c);
     fn->add_block(c);
 
     Fn_call_block *a = new Fn_call_block("add", true);
-    a->flags[0] = IWORD_8(4);
+    a->flags[0] = IWORD_8(1);
     fn->add_block(a);
 
     Fn_call_block *al = new Fn_call_block("alloc", true);

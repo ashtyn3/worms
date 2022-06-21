@@ -38,7 +38,7 @@ class Parser {
     vector<Parse_tok *> while_run();
     Parse_tok *parse_fn();
     Parse_tok *parse_param();
-    Parse_tok *parse_fn_call();
+    Parse_tok *parse_fn_call(bool);
     Parse_tok *parse_ret();
     Parse_tok *parse_flag_set();
     Parse_tok *parse_end();

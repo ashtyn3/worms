@@ -129,14 +129,16 @@ Parse_tok *Parser::parse_param() {
     return p;
 }
 
-Parse_tok *Parser::parse_fn_call() {
+Parse_tok *Parser::parse_fn_call(bool has_call) {
     Parse_tok *p = new Parse_tok;
     p->line = tok.pos.line;
     p->type = function_c_t;
     Function_call *fn_call = new Function_call;
 
     // consume call;
-    next_tok();
+    if (has_call) {
+        next_tok();
+    }
 
     fn_call->name = tok.token;
 
@@ -242,7 +244,9 @@ Parse_tok *Parser::run() {
                peek().type == BUILTIN) {
         t = parse_param();
     } else if (tok.token == "call") {
-        t = parse_fn_call();
+        t = parse_fn_call(true);
+    } else if (tok.type == BUILTIN) {
+        t = parse_fn_call(false);
     } else if (tok.token == "ret") {
         t = parse_ret();
     } else {
