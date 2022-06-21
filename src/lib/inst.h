@@ -41,6 +41,8 @@ enum {
     N_EQ_INST,
     GET_LOCAL_INST,
     LOAD_LOCAL_INST,
+    ALLOC_LOCAL_INST,
+    INDEX_LOAD_LOCAL_INST,
     FREE_LOCAL_INST,
     CALL_INST,
 };
@@ -134,8 +136,14 @@ struct Inst {
         case LOAD_LOCAL_INST:
             cout << "<" << opcode.value.INT << "> LOAD_LOCAL";
             break;
+        case ALLOC_LOCAL_INST:
+            cout << "<" << opcode.value.INT << "> ALLOC_LOCAL";
+            break;
         case FREE_LOCAL_INST:
             cout << "<" << opcode.value.INT << "> FREE_LOCAL";
+            break;
+        case INDEX_LOAD_LOCAL_INST:
+            cout << "<" << opcode.value.INT << "> INDEX_LOAD_LOCAL_INST";
             break;
         }
         cout << "\n  FLAGS: ";

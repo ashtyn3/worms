@@ -85,6 +85,7 @@ word Worms::exec() {
         }
         word num1 = stack.pop();
         word num2 = stack.pop();
+        cout << num1.t_flag << endl;
         MATH_OP(+, num1, num2);
         ip.value.INT++;
         break;
@@ -211,6 +212,15 @@ word Worms::exec() {
         }
         ip.value.INT++;
         break;
+    }
+    case ALLOC_LOCAL_INST: {
+        int addr = stack.alloc_loc(in.params->value.INT);
+        stack.push(IWORD(addr));
+    }
+    case INDEX_LOAD_LOCAL_INST: {
+        int addr = in.params[1].value.INT;
+        int offset = in.params[0].value.INT;
+        stack.op_stack[addr + 1 + offset] = stack.pop();
     }
     }
     return IWORD(TRAP_OK);
