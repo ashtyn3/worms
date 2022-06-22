@@ -54,9 +54,11 @@ int main() {
     // fn->add_param_sig("a", snailer_float64_t);
 
     Fn_call_block *c = new Fn_call_block("push", true);
+
     Value *v = new Value();
     v->set_Integer32(2);
     c->add_param(v);
+
     fn->add_block(c);
     fn->add_block(c);
 

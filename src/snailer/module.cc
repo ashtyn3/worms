@@ -113,6 +113,18 @@ string Value::produce() {
         str.append(to_string(integer.value));
         str.append(" i" + to_string(integer.size));
         break;
+    case snailer_int32_t:
+        str.append(to_string(integer.value_32));
+        str.append(" i" + to_string(integer.size));
+        break;
+    case snailer_int16_t:
+        str.append(to_string(integer.value_16));
+        str.append(" i" + to_string(integer.size));
+        break;
+    case snailer_int8_t:
+        str.append(to_string(integer.value_8));
+        str.append(" i" + to_string(integer.size));
+        break;
     case snailer_float64_t:
         str.append(to_string(s_float.value));
         str.append(" f" + to_string(s_float.size));
