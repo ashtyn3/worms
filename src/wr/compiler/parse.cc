@@ -126,6 +126,9 @@ Parse_tok *Parser::parse_param() {
     }
 
     p->param = param;
+    if (tok.type == END) {
+        next_tok();
+    }
     return p;
 }
 
@@ -151,6 +154,7 @@ Parse_tok *Parser::parse_fn_call(bool has_call) {
             if (tok.type == END) {
                 break;
             }
+
             next_tok();
         }
         next_tok();
@@ -164,7 +168,9 @@ Parse_tok *Parser::parse_fn_call(bool has_call) {
         fn_call->params = bod_p.while_run();
     }
     p->fn_call = fn_call;
-    // next_tok();
+    if (tok.type == END) {
+        next_tok();
+    }
     return p;
 }
 
@@ -234,6 +240,9 @@ Parse_tok *Parser::parse_flag_set() {
 Parse_tok *Parser::run() {
     Parse_tok *t;
 
+    if (tok.token == ",") {
+        next_tok();
+    }
     if (tok.token == ";") {
         t = parse_end();
     } else if (tok.token == "fn") {
