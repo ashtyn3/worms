@@ -77,6 +77,7 @@ int Stack_frame::alloc_loc(int size) {
 
     if (start_addr > -1) {
         op_stack[start_addr] = IWORD(size);
+        op_top++;
     }
 
     return start_addr;

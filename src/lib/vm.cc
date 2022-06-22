@@ -213,13 +213,17 @@ word Worms::exec() {
         break;
     }
     case ALLOC_LOCAL_INST: {
-        int addr = stack.alloc_loc(in.params->value.INT);
+        int addr = stack.alloc_loc(in.params[0].value.INT);
         stack.push(IWORD(addr));
+        ip.value.INT++;
+        break;
     }
     case INDEX_LOAD_LOCAL_INST: {
-        int addr = in.params[1].value.INT;
-        int offset = in.params[0].value.INT;
+        int addr = in.params[0].value.INT;
+        int offset = in.params[1].value.INT;
         stack.op_stack[addr + 1 + offset] = stack.pop();
+        ip.value.INT++;
+        break;
     }
     }
     return IWORD(TRAP_OK);

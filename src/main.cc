@@ -54,10 +54,7 @@ int main() {
     // fn->add_param_sig("a", snailer_float64_t);
 
     Fn_call_block *c = new Fn_call_block("push", true);
-    // c->p_size = IWORD(1);
-
     Value *v = new Value();
-    // v->set_Integer(9007199254740991);
     v->set_Integer32(2);
     c->add_param(v);
     fn->add_block(c);
@@ -69,10 +66,31 @@ int main() {
 
     Fn_call_block *al = new Fn_call_block("alloc", true);
     Value *v2 = new Value();
-    v2->set_Integer(0);
+    v2->set_Integer(2);
     al->add_param(v2);
 
     fn->add_block(al);
+
+    Fn_call_block *dup = new Fn_call_block("dup", true);
+
+    dup->flags[0] = IWORD_8(1);
+    Value *v22 = new Value();
+    v22->set_Integer(0);
+    dup->add_param(v22);
+
+    fn->add_block(dup);
+
+    Fn_call_block *gl = new Fn_call_block("gl_offset", true);
+    gl->p_size = IWORD_8(1);
+    Value *v11 = new Value();
+    v11->set_Integer(0);
+    gl->add_param(v11);
+
+    Value *v12 = new Value();
+    v12->set_Integer(0);
+    gl->add_param(v12);
+
+    fn->add_block(gl);
 
     Fn_call_block *h = new Fn_call_block("exit", true);
     fn->add_block(h);

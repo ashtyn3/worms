@@ -51,8 +51,10 @@ class snailer_byte_generator {
         symbol_table["equal"] = pair(nullptr, EQ_INST);
         symbol_table["not_equal"] = pair(nullptr, N_EQ_INST);
         symbol_table["get_local"] = pair(nullptr, GET_LOCAL_INST);
-        symbol_table["alloc"] = pair(nullptr, LOAD_LOCAL_INST);
+        symbol_table["set_local"] = pair(nullptr, LOAD_LOCAL_INST);
         symbol_table["free_local"] = pair(nullptr, FREE_LOCAL_INST);
+        symbol_table["alloc"] = pair(nullptr, ALLOC_LOCAL_INST);
+        symbol_table["gl_offset"] = pair(nullptr, INDEX_LOAD_LOCAL_INST);
     };
     void proc_module();
     void write(string name);
