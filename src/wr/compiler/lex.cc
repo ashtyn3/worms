@@ -44,7 +44,7 @@ void Lexer::Lex() {
             string name;
             name.push_back(ch);
             next_ch();
-            while (isalnum(ch)) {
+            while (isalnum(ch) || ch == '_') {
                 name.push_back(ch);
                 next_ch();
             }
@@ -60,11 +60,11 @@ void Lexer::Lex() {
             string name;
             name.push_back(ch);
             next_ch();
-            while (isalnum(ch)) {
+            while (isalnum(ch) || ch == '_') {
                 name.push_back(ch);
                 next_ch();
             }
-            next_ch();
+            // next_ch();
             toks.push_back({.pos = {.start_col = start,
                                     .end_col = index,
                                     .line = line_num + 1},
@@ -103,7 +103,7 @@ void Lexer::Lex() {
             name.push_back(ch);
             next_ch();
             while (1) {
-                if (!isalnum(ch)) {
+                if (!isalnum(ch) || ch == '_') {
                     break;
                 }
                 name.push_back(ch);
@@ -160,6 +160,8 @@ void Lexer::Lex() {
                                     .line = line_num + 1},
                             .type = EQUAL,
                             .token = "="});
+        } else {
+            cout << "unknown token: " << ch << endl;
         }
     }
 }
