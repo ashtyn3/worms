@@ -41,9 +41,12 @@ enum value_t {
     snailer_null_t,
     snailer_pointer_t,
 };
+string t_string(value_t t);
 enum block_t {
     snailer_fn_block_t,
     snailer_fn_call_block_t,
+    snailer_value_t,
+    Snailer_param_t,
 };
 
 class Fn_block;
@@ -64,7 +67,7 @@ class Block {
     virtual Inst raw_instruction(){};
     virtual string produce(){};
 
-    block_t type;
+    block_t b_type;
     // virtual int make_local(string name, value_t type) = 0;
     // virtual void add_block(Block *b) = 0;
 };
@@ -95,12 +98,15 @@ class Value : public Block {
 
     string produce();
     Inst raw_instruction();
+    Value() { b_type = snailer_value_t; };
 };
-class Param : public Block {
+class Snailer_param : public Block {
   public:
     string name;
     value_t val_t;
-    Param(string name, value_t vt) : name(name), val_t(vt){};
+    Snailer_param(string name, value_t vt) : name(name), val_t(vt) {
+        b_type = Snailer_param_t;
+    };
     string produce();
 };
 
@@ -109,10 +115,10 @@ class Fn_block : public Block {
     map<string, value_t> heap_model;
 
   public:
-    Fn_block(string name) : name(name){};
+    Fn_block(string name) : name(name) { b_type = snailer_fn_block_t; };
     string name;
     value_t return_t;
-    vector<Param *> params;
+    vector<Snailer_param *> params;
     vector<Block *> body;
     int make_local(string name, value_t type);
     void add_block(Block *b);
@@ -126,7 +132,7 @@ class Fn_call_block : public Block {
     bool is_builtin;
     vector<Value *> params;
     Fn_call_block(string name, bool builtin) : name(name), is_builtin(builtin) {
-        type = snailer_fn_call_block_t;
+        b_type = snailer_fn_call_block_t;
     };
     string produce();
     Inst raw_instruction();

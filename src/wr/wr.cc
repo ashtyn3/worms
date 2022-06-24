@@ -18,8 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "compiler/gen.h"
 #include "compiler/lex.h"
 #include "compiler/parser.h"
+#include "src/snailer/byte_gen.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -59,6 +61,14 @@ int main(int argc, char *argv[]) {
     //   p_toks.push_back(p.run());
     // }
     p_toks = p.while_run();
+
+    code_gen *c = new code_gen(p_toks);
+    auto blocks = c->while_gen();
+    auto fn = (Fn_block *)blocks[0];
+
+    auto gen = new snailer_byte_generator(c->mod);
+    gen->proc_module();
+    gen->write("worms.out");
 
     file.close();
     return 0;

@@ -39,13 +39,14 @@ class Function_call {
   public:
     string name;
     string ret_type;
+    bool is_builtin;
     vector<Parse_tok *> params;
 };
 
 class Flags {
   public:
     string index;
-    uint8_t value;
+    int8_t value;
 };
 
 class Return {
@@ -72,7 +73,7 @@ enum Parse_type {
 };
 class Parse_tok {
   public:
-    int line;
+    int line = 0;
     Parse_type type;
     Param *param;
     Function *function;

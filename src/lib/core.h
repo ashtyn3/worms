@@ -75,6 +75,7 @@ struct word {
     }
 std::string is_type(int);
 std::string GET_VALUE(word);
+int str_value_t(std::string t_name);
 
 #define IWORD(v)                                                               \
     { .value = {.INT = v}, .t_flag = 0 }

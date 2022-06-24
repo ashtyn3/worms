@@ -56,6 +56,20 @@ int is_size(word w) {
     }
 }
 
+int str_value_t(string t_name) {
+    if (t_name == "i64") {
+        return 0;
+    } else if (t_name == "i32") {
+        return 1;
+    } else if (t_name == "i16") {
+        return 2;
+    } else if (t_name == "i8") {
+        return 3;
+    } else if (t_name == "f64") {
+        return 4;
+    }
+    return 0;
+}
 string GET_VALUE(word w) {
     int t_flag = w.t_flag;
     if (is_type(t_flag) == "i64") {

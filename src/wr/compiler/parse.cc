@@ -100,6 +100,9 @@ Parse_tok *Parser::parse_fn() {
 
     p->function = fn;
     next_tok();
+    if (tok.type == END) {
+        next_tok();
+    }
     return p;
 }
 Parse_tok *Parser::parse_param() {
@@ -144,6 +147,10 @@ Parse_tok *Parser::parse_fn_call(bool has_call) {
     }
 
     fn_call->name = tok.token;
+
+    if (tok.type == BUILTIN) {
+        fn_call->is_builtin = true;
+    }
 
     next_tok();
 

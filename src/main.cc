@@ -97,7 +97,6 @@ int main() {
     Fn_call_block *h = new Fn_call_block("exit", true);
     fn->add_block(h);
 
-    cout << fn->produce() << endl;
     auto gen = new snailer_byte_generator(mod);
     gen->proc_module();
     gen->write("worms.out");

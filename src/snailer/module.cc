@@ -166,7 +166,7 @@ void Fn_call_block::add_param(Value *p) { params.push_back(p); }
 
 void Fn_block::add_param_sig(string n, value_t vt) {
     heap_model[n] = vt;
-    params.push_back(new Param(n, vt));
+    params.push_back(new Snailer_param(n, vt));
 }
 
 string Fn_call_block::produce() {
@@ -217,7 +217,7 @@ Fn_block *Module::make_fn(string name, value_t ret_t) {
 
 void Fn_block::add_block(Block *b) { body.push_back(b); }
 
-string Param::produce() {
+string Snailer_param::produce() {
     string str;
     str.append(name + " ");
     str.append(t_string(val_t));

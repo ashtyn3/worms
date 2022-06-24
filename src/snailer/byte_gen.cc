@@ -146,7 +146,7 @@ void snailer_byte_generator::proc_module() {
 
         Block *b = mod->blocks[i];
 
-        if (b->type == snailer_fn_block_t) {
+        if (b->b_type == snailer_fn_block_t) {
             Module *M = new Module();
             Fn_block *fn = (Fn_block *)b;
             symbol_table[fn->name] = pair(fn, bytecode.size());
@@ -158,7 +158,7 @@ void snailer_byte_generator::proc_module() {
             g->proc_module();
             bytecode.insert(bytecode.end(), g->bytecode.begin(),
                             g->bytecode.end());
-        } else if (b->type == snailer_fn_call_block_t) {
+        } else if (b->b_type == snailer_fn_call_block_t) {
             Fn_call_block *fn = (Fn_call_block *)b;
 
             if (!symbol_table.contains(fn->name)) {
