@@ -11,4 +11,4 @@ executable('worms',
 
 executable('worms_wr',
            './src/wr/wr.cc',
-           install : true, link_with: [lexer, parser])
+           install : true, link_with: [lexer, parser, Generator, module, core, byte])
