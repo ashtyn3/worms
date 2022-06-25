@@ -25,6 +25,7 @@
 #ifndef MODULE_H
 #define MODULE_H
 #include "../lib/inst.h"
+#include "spdlog/spdlog.h"
 #include "val.h"
 #include <map>
 #include <string>
@@ -60,7 +61,7 @@ class Block {
     Fn_call_block *call;
 
   public:
-    word flags[3];
+    word flags[3] = {};
     word p_size = IWORD_8(0);
     virtual ~Block() = default;
     // int get_pointer_to();

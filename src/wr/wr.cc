@@ -18,10 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "../include/argparse.hpp"
+#include "../snailer/byte_gen.h"
 #include "compiler/gen.h"
 #include "compiler/lex.h"
 #include "compiler/parser.h"
-#include "src/snailer/byte_gen.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -30,18 +31,22 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    if (!argc) {
-        cout << "usage: worms_wr <filename>" << endl;
-        return 1;
+    argparse::ArgumentParser program("worms_wr");
+    program.add_argument("filename")
+        .help("The text bytecode filename ending in \".wors\".")
+        .required();
+    try {
+        program.parse_args(argc, argv);
+    } catch (const std::runtime_error &err) {
+        std::cerr << err.what() << std::endl;
+        std::cerr << program;
+        std::exit(1);
     }
-    string name;
-    if (argv[1]) {
-        name = argv[1];
-    } else {
-        cout << "usage: worms_wr <filename>" << endl;
-        return 1;
-    }
+
+    string name = program.get<string>("filename");
+
     cout << "compiling " << name << endl;
+
     string line;
     vector<string> lines;
 

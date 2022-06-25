@@ -82,7 +82,7 @@ uint8_t *snailer_byte_generator::produce_bytes(Inst *inst) {
 Inst *snailer_byte_generator::reproduce_inst(vector<uint8_t> b) {
     auto in = new Inst;
 
-    in->opcode = IWORD_8((int8_t)b[0]);
+    in->opcode = IWORD(b[0]);
 
     in->flags[0] = IWORD_8((int8_t)b[1]);
     in->flags[1] = IWORD_8((int8_t)b[2]);

@@ -1,3 +1,4 @@
-fn start
-    &push 32 i32;
+fn start -> i64
+    call &push 2 i32;
+    call &exit;
 end start;

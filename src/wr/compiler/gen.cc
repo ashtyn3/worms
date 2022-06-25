@@ -78,13 +78,15 @@ Fn_call_block *code_gen::gen_fn_call() {
     if (peek() != NULL && peek()->type == flag_set_t) {
         next();
         int index = ptok->flags->index[1] - '0';
-        fn_call_b->flags[index] = IWORD_8(ptok->flags->value);
-        while (1) {
-            next();
-            int index = ptok->flags->index[1] - '0';
-            fn_call_b->flags[index] = IWORD_8(ptok->flags->value);
-            if (peek()->type != flag_set_t) {
-                break;
+        fn_call_b->flags[index - 1] = IWORD_8(ptok->flags->value);
+        if (peek()->type == flag_set_t) {
+            while (1) {
+                next();
+                int index = ptok->flags->index[1] - '0';
+                fn_call_b->flags[index] = IWORD_8(ptok->flags->value);
+                if (peek()->type != flag_set_t) {
+                    break;
+                }
             }
         }
     }

@@ -4,7 +4,7 @@ import os
 import sys
 os.chdir("build")
 
-build = subprocess.run(["meson", "compile"], stdout=subprocess.PIPE,
+build = subprocess.run(["ninja"], stdout=subprocess.PIPE,
   stderr=subprocess.PIPE)
 
 
@@ -17,14 +17,14 @@ else:
     print(build.stdout.decode("utf-8"))
     os._exit(1)
 
-if len(sys.argv) == 1:
-    output = subprocess.run(["build/worms"], shell=True)
+if len(sys.argv) > 1 and sys.argv[1] == "wr":
+    output = subprocess.run(["build/worms-wr"]+sys.argv[2:])
+    print("Completed with status:",output.returncode)
+elif len(sys.argv) > 1 and sys.argv[1] == "vm":
+    output = subprocess.run(["build/worms-c"]+sys.argv[2:])
     print("Completed with status:",output.returncode)
 else:
-    if sys.argv[1] == "wr":
-        output = subprocess.run(["build/worms_wr"]+sys.argv[2:])
-        print("Completed with status:",output.returncode)
-    if sys.argv[1] == "vm":
-        output = subprocess.run(["build/worms"], shell=True)
-        print("Completed with status:",output.returncode)
+    output = subprocess.run(["build/worms-c"]+sys.argv[1:])
+    print("Completed with status:",output.returncode)
+
 

@@ -27,7 +27,7 @@ word Worms::load_program(vector<Inst> prog) {
 
 word Worms::exec() {
     Inst in = program[ip.value.INT];
-    switch (in.opcode.value.INT) {
+    switch (in.opcode.value.INT8) {
 
     case HALT_INST: {
         halted = true;
@@ -53,15 +53,15 @@ word Worms::exec() {
 
     case DUP_INST: {
         word to_dup;
-        if (in.flags[0].value.INT == 0) {
+        if (in.flags[0].value.INT8 == 0) {
             to_dup = stack.at_top();
-        } else if (in.flags[0].value.INT == 1) {
+        } else if (in.flags[0].value.INT8 == 1) {
 
-            if (in.params[0].value.INT >= STACK_SIZE) {
+            if (in.params[0].value.INT8 >= STACK_SIZE) {
                 return IWORD(TRAP_STACK_OVERFLOW);
             }
 
-            if (in.params[0].value.INT < 0) {
+            if (in.params[0].value.INT8 < 0) {
                 return IWORD(TRAP_STACK_UNDERFLOW);
             }
 
@@ -70,7 +70,7 @@ word Worms::exec() {
             return IWORD(TRAP_UNKNOWN_FLAG);
         }
 
-        if (in.flags[1].value.INT == 0) {
+        if (in.flags[1].value.INT8 == 0) {
             stack.push(to_dup);
         } else {
             return IWORD(TRAP_UNKNOWN_FLAG);
@@ -154,7 +154,7 @@ word Worms::exec() {
         }
 
         // If equal jump
-        if (in.flags[0].value.INT == 1) {
+        if (in.flags[0].value.INT8 == 1) {
             if (stack.top - 1 < 0) {
                 return IWORD(TRAP_STACK_UNDERFLOW);
             }
@@ -163,7 +163,7 @@ word Worms::exec() {
                 ip.value.INT++;
                 break;
             }
-        } else if (in.flags[0].value.INT == 0) {
+        } else if (in.flags[0].value.INT8 == 0) {
         } else {
             return IWORD(TRAP_UNKNOWN_FLAG);
         }
@@ -225,6 +225,9 @@ word Worms::exec() {
         ip.value.INT++;
         break;
     }
+    default:
+        cout << in.opcode.value.INT << endl;
+        break;
     }
     return IWORD(TRAP_OK);
 }

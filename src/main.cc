@@ -21,90 +21,51 @@
 #include <iostream>
 
 // #include "lib/inst.h"
-// #include "lib/vm.h"
-#include "snailer/byte_gen.h"
-#include "snailer/byte_load.h"
-#include "snailer/module.h"
-#include "src/lib/core.h"
-#include "src/lib/vm.h"
+#include "./include/argparse.hpp"
+#include "./lib/vm.h"
+#include "./snailer/byte_load.h"
+#include "spdlog/spdlog.h"
+
+#include <fstream>
 #include <vector>
+
+using std::ifstream;
 
 using namespace std;
 
 #define ARRAY_SIZE(arr) sizeof(arr) / sizeof(arr[0])
 
-int main() {
-    // vector<Inst> prog = {PUSH({IWORD(0)}),
-    //                      PUSH({IWORD(1)}),
-    //                      ADD,
-    //                      DUP({}, {}),
-    //                      PUSH({IWORD(10)}),
-    //                      N_EQ,
-    //                      JMP({IWORD(1)}, {IWORD(1)}),
-    //                      HALT};
-    // Inst add = {.opcode = IWORD(ADD_INST),
-    //             .flags = {IWORD(0), IWORD(0), IWORD(4)}};
-    // Worms *hi = new Worms;
-    // hi->full_trace = true;
-    // hi->load_program(prog);
-    // hi->run();
-    Module *mod = new Module;
-    Fn_block *fn = mod->make_fn("start", snailer_int64_t);
+int main(int argc, char *argv[]) {
+    spdlog::info("hi");
+    argparse::ArgumentParser program("Worms");
+    //
+    program.add_argument("filename").help("The bytecode filename.").required();
+    program.add_argument("--trace", "-T")
+        .help("Print debug stack traces")
+        .default_value(false)
+        .implicit_value(true);
 
-    // fn->add_param_sig("a", snailer_float64_t);
+    try {
+        program.parse_args(argc, argv);
+    } catch (const std::runtime_error &err) {
+        std::cerr << err.what() << std::endl;
+        std::cerr << program;
+        std::exit(1);
+    }
+    //
+    ifstream is(program.get<string>("filename"));
+    std::istream_iterator<uint8_t> start(is), end;
+    std::vector<uint8_t> file_bytes(start, end);
+    //
+    snailer_byte_loader *h = new snailer_byte_loader(file_bytes);
+    auto vm = new Worms;
+    if (program["-T"] == true) {
+        vm->full_trace = true;
+    }
+    // cout << (int)h->instructions[6].opcode.value.INT8 << endl;
+    // vm->ip = IWORD(file_bytes[0]);
+    vm->load_program(h->instructions);
+    vm->run();
 
-    Fn_call_block *c = new Fn_call_block("push", true);
-
-    Value *v = new Value();
-    v->set_Integer32(2);
-    c->add_param(v);
-
-    fn->add_block(c);
-    fn->add_block(c);
-
-    Fn_call_block *a = new Fn_call_block("add", true);
-    a->flags[0] = IWORD_8(1);
-    fn->add_block(a);
-
-    Fn_call_block *al = new Fn_call_block("alloc", true);
-    Value *v2 = new Value();
-    v2->set_Integer(2);
-    al->add_param(v2);
-
-    fn->add_block(al);
-
-    Fn_call_block *dup = new Fn_call_block("dup", true);
-
-    dup->flags[0] = IWORD_8(1);
-    Value *v22 = new Value();
-    v22->set_Integer(0);
-    dup->add_param(v22);
-
-    fn->add_block(dup);
-
-    Fn_call_block *gl = new Fn_call_block("gl_offset", true);
-    gl->p_size = IWORD_8(1);
-    Value *v11 = new Value();
-    v11->set_Integer(0);
-    gl->add_param(v11);
-
-    Value *v12 = new Value();
-    v12->set_Integer(0);
-    gl->add_param(v12);
-
-    fn->add_block(gl);
-
-    Fn_call_block *h = new Fn_call_block("exit", true);
-    fn->add_block(h);
-
-    auto gen = new snailer_byte_generator(mod);
-    gen->proc_module();
-    gen->write("worms.out");
-
-    auto sn_load = new snailer_byte_loader(gen->bytecode);
-    Worms *hi = new Worms;
-    hi->full_trace = true;
-    hi->load_program(sn_load->instructions);
-    hi->run();
-    // cout << (int)i->params[0].value.INT16 << endl;
+    return 0;
 }

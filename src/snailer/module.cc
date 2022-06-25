@@ -187,14 +187,14 @@ string Fn_call_block::produce() {
 
 Inst Fn_call_block::raw_instruction() {
     Inst inst;
-    inst.opcode = IWORD_8(CALL_INST);
+    inst.opcode = IWORD(CALL_INST);
 
     inst.flags[0] = flags[0];
     inst.flags[1] = flags[1];
     inst.flags[2] = p_size;
 
     if (params.size() < 2 && p_size.value.INT8 == 1) {
-        cout << "BAD ARGUMENT LENGTH WITH PARAM MODE SET TO 1" << endl;
+        spdlog::critical("Bad argument length of 2 with param mode set to 1");
         exit(1);
     }
     if (params.empty()) {
