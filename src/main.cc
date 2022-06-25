@@ -36,9 +36,8 @@ using namespace std;
 #define ARRAY_SIZE(arr) sizeof(arr) / sizeof(arr[0])
 
 int main(int argc, char *argv[]) {
-    spdlog::info("hi");
     argparse::ArgumentParser program("Worms");
-    //
+
     program.add_argument("filename").help("The bytecode filename.").required();
     program.add_argument("--trace", "-T")
         .help("Print debug stack traces")
