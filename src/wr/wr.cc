@@ -20,6 +20,7 @@
 
 #include "../include/argparse.hpp"
 #include "../snailer/byte_gen.h"
+#include "../version.h"
 #include "compiler/gen.h"
 #include "compiler/lex.h"
 #include "compiler/parser.h"
@@ -31,7 +32,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    argparse::ArgumentParser program("worms_wr");
+    argparse::ArgumentParser program("worms_wr", WR_VERSION);
     program.add_argument("filename")
         .help("The text bytecode filename ending in \".wors\".")
         .required();

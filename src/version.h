@@ -21,3 +21,4 @@
  */
 
 #define WORMS_VERSION "0.1.0"
+#define WR_VERSION "0.1.0"

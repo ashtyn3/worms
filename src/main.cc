@@ -24,6 +24,7 @@
 #include "./include/argparse.hpp"
 #include "./lib/vm.h"
 #include "./snailer/byte_load.h"
+#include "./version.h"
 #include "spdlog/spdlog.h"
 
 #include <fstream>
@@ -36,7 +37,7 @@ using namespace std;
 #define ARRAY_SIZE(arr) sizeof(arr) / sizeof(arr[0])
 
 int main(int argc, char *argv[]) {
-    argparse::ArgumentParser program("Worms");
+    argparse::ArgumentParser program("Worms", WORMS_VERSION);
 
     program.add_argument("filename").help("The bytecode filename.").required();
     program.add_argument("--trace", "-T")
