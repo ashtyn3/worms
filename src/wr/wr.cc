@@ -24,6 +24,7 @@
 #include "compiler/gen.h"
 #include "compiler/lex.h"
 #include "compiler/parser.h"
+#include "spdlog/spdlog.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -46,7 +47,7 @@ int main(int argc, char *argv[]) {
 
     string name = program.get<string>("filename");
 
-    cout << "compiling " << name << endl;
+    spdlog::info("compiling {}", name);
 
     string line;
     vector<string> lines;
