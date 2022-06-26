@@ -65,8 +65,8 @@ class Block {
     word p_size = IWORD_8(0);
     virtual ~Block() = default;
     // int get_pointer_to();
-    virtual Inst raw_instruction(){};
-    virtual string produce(){};
+    virtual Inst raw_instruction() { return {}; };
+    virtual string produce() { return {}; };
 
     block_t b_type;
     // virtual int make_local(string name, value_t type) = 0;

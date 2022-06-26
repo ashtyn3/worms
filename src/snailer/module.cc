@@ -133,6 +133,9 @@ string Value::produce() {
         str.append(to_string(ptr.value));
         str.append(" ref");
         break;
+    case snailer_null_t:
+        str.append("nil");
+        str.append(" ref");
     }
     return str;
 }
@@ -157,6 +160,9 @@ Inst Value::raw_instruction() {
         break;
     case snailer_pointer_t:
         inst.opcode = IWORD(integer.value);
+        break;
+    case snailer_null_t:
+        inst.opcode = IWORD(-5);
         break;
     }
     return inst;

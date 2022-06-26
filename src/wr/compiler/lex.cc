@@ -24,7 +24,7 @@
 #include <vector>
 
 void Lexer::Lex() {
-    while (index < lines.size()) {
+    while (index < (int)lines.size()) {
         if (ch == '\n') {
             line_num++;
             next_ch();

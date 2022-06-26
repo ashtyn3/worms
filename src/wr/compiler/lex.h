@@ -63,7 +63,7 @@ class Lexer {
         ch = lines[index];
     };
     char peek() {
-        if (index + 1 < lines.size()) {
+        if (index + 1 < (int)lines.size()) {
             return lines[index + 1];
         } else {
             return -1;
