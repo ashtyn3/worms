@@ -23,13 +23,16 @@
 word Stack_frame::at_top() { return stack[top]; }
 
 word Stack_frame::pop() {
+    // TODO: Add protection against popping out of frame.
     word value = at_top();
     top--;
+    frame--;
     return value;
 }
 
 void Stack_frame::push(word value) {
     top++;
+    frame++;
     stack[top] = value;
 }
 

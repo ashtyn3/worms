@@ -30,6 +30,7 @@
 using namespace std;
 struct Stack_frame {
     int top = -1;
+    int frame = top;
 
     word stack[STACK_SIZE];
 

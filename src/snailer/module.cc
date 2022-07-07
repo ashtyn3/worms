@@ -193,7 +193,7 @@ string Fn_call_block::produce() {
 
 Inst Fn_call_block::raw_instruction() {
     Inst inst;
-    inst.opcode = IWORD(CALL_INST);
+    inst.opcode = IWORD_8(CALL_INST);
 
     inst.flags[0] = flags[0];
     inst.flags[1] = flags[1];

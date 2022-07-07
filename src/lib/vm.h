@@ -25,12 +25,13 @@
 #define VM_H
 #include "core.h"
 #include "inst.h"
+#include "spdlog/spdlog.h"
 #include "stack.h"
 #include "traps.h"
 #include <vector>
 
 struct Worms {
-    word ip;
+    word ip = IWORD(-1);
     vector<Inst> program;
     Stack_frame stack;
     bool halted;

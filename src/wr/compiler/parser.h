@@ -32,6 +32,7 @@ class Parser {
 
   public:
     vector<Lex_tok> toks;
+    map<string, Parse_tok *> symbols;
     void next_tok();
     Lex_tok peek();
     Parse_tok *run();

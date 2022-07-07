@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 #include "parser.h"
+#include "spdlog/spdlog.h"
 
 #include <iostream>
 
@@ -93,12 +94,14 @@ Parse_tok *Parser::parse_fn() {
     }
     next_tok();
     Parser bod_p(sub_tree);
+    bod_p.symbols.merge(symbols);
     // while (bod_p.index < sub_tree.size()) {
     //   fn->params.push_back(bod_p.run());
     // }
     fn->body = bod_p.while_run();
 
     p->function = fn;
+    symbols[fn->name] = p;
     next_tok();
     if (tok.type == END) {
         next_tok();
@@ -150,6 +153,12 @@ Parse_tok *Parser::parse_fn_call(bool has_call) {
 
     if (tok.type == BUILTIN) {
         fn_call->is_builtin = true;
+    } else {
+        if (!symbols.contains(fn_call->name)) {
+            spdlog::critical("no symbol {} found on line {}", fn_call->name,
+                             tok.pos.line);
+            exit(-1);
+        }
     }
 
     next_tok();

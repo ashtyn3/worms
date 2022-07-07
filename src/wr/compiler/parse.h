@@ -39,7 +39,7 @@ class Function_call {
   public:
     string name;
     string ret_type;
-    bool is_builtin;
+    bool is_builtin = false;
     vector<Parse_tok *> params;
 };
 

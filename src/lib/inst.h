@@ -21,13 +21,14 @@
  */
 
 #pragma once
+#include "spdlog/spdlog.h"
 #ifndef INST_H
 #define INST_H
 #include "core.h"
 #include "iostream"
 using namespace std;
 
-enum {
+enum instructions : int8_t {
     PUSH_INST = 1,
     POP_INST,
     HALT_INST,
@@ -45,6 +46,7 @@ enum {
     INDEX_LOAD_LOCAL_INST,
     FREE_LOCAL_INST,
     CALL_INST,
+    RETURN_INST
 };
 
 #define PUSH(value)                                                            \
@@ -96,54 +98,63 @@ struct Inst {
     word params[2] = {};
     void debug(word ip) {
         cout << ip.value.INT << ": ";
-        switch (opcode.value.INT) {
+        switch (opcode.value.INT8) {
         case PUSH_INST:
-            cout << "<" << opcode.value.INT << "> PUSH";
+            cout << "<" << (int)opcode.value.INT8 << "> PUSH";
             break;
         case POP_INST:
-            cout << "<" << opcode.value.INT << "> POP";
+            cout << "<" << (int)opcode.value.INT8 << "> POP";
             break;
         case HALT_INST:
-            cout << "<" << opcode.value.INT << "> HALT";
+            cout << "<" << (int)opcode.value.INT8 << "> HALT";
             break;
         case ADD_INST:
-            cout << "<" << opcode.value.INT << "> ADD";
+            cout << "<" << (int)opcode.value.INT8 << "> ADD";
             break;
         case SUB_INST:
-            cout << "<" << opcode.value.INT << "> SUB";
+            cout << "<" << (int)opcode.value.INT8 << "> SUB";
             break;
         case MUL_INST:
-            cout << "<" << opcode.value.INT << "> SUB";
+            cout << "<" << (int)opcode.value.INT8 << "> SUB";
             break;
         case DIV_INST:
-            cout << "<" << opcode.value.INT << "> DIV";
+            cout << "<" << (int)opcode.value.INT8 << "> DIV";
             break;
         case EQ_INST:
-            cout << "<" << opcode.value.INT << "> EQ";
+            cout << "<" << (int)opcode.value.INT8 << "> EQ";
             break;
         case N_EQ_INST:
-            cout << "<" << opcode.value.INT << "> NEQ";
+            cout << "<" << (int)opcode.value.INT8 << "> NEQ";
             break;
         case DUP_INST:
-            cout << "<" << opcode.value.INT << "> DUP";
+            cout << "<" << (int)opcode.value.INT8 << "> DUP";
             break;
         case JMP_INST:
-            cout << "<" << opcode.value.INT << "> JMP";
+            cout << "<" << (int)opcode.value.INT8 << "> JMP";
             break;
         case GET_LOCAL_INST:
-            cout << "<" << opcode.value.INT << "> GET_LOCAL";
+            cout << "<" << (int)opcode.value.INT8 << "> GET_LOCAL";
             break;
         case LOAD_LOCAL_INST:
-            cout << "<" << opcode.value.INT << "> LOAD_LOCAL";
+            cout << "<" << (int)opcode.value.INT8 << "> LOAD_LOCAL";
             break;
         case ALLOC_LOCAL_INST:
-            cout << "<" << opcode.value.INT << "> ALLOC_LOCAL";
+            cout << "<" << (int)opcode.value.INT8 << "> ALLOC_LOCAL";
             break;
         case FREE_LOCAL_INST:
-            cout << "<" << opcode.value.INT << "> FREE_LOCAL";
+            cout << "<" << (int)opcode.value.INT8 << "> FREE_LOCAL";
             break;
         case INDEX_LOAD_LOCAL_INST:
-            cout << "<" << opcode.value.INT << "> INDEX_LOAD_LOCAL_INST";
+            cout << "<" << (int)opcode.value.INT8 << "> INDEX_LOAD_LOCAL";
+            break;
+        case CALL_INST:
+            cout << "<" << (int)opcode.value.INT8 << "> CALL";
+            break;
+        case RETURN_INST:
+            cout << "<" << (int)opcode.value.INT8 << "> RETURN";
+            break;
+        default:
+            cout << "<NIL> BAD";
             break;
         }
         cout << "\n  FLAGS: ";

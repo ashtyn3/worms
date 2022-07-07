@@ -82,7 +82,7 @@ uint8_t *snailer_byte_generator::produce_bytes(Inst *inst) {
 Inst *snailer_byte_generator::reproduce_inst(vector<uint8_t> b) {
     auto in = new Inst;
 
-    in->opcode = IWORD(b[0]);
+    in->opcode = IWORD_8((int8_t)b[0]);
 
     in->flags[0] = IWORD_8((int8_t)b[1]);
     in->flags[1] = IWORD_8((int8_t)b[2]);
@@ -148,14 +148,21 @@ void snailer_byte_generator::proc_module() {
 
         if (b->b_type == snailer_fn_block_t) {
             Module *M = new Module();
+
             Fn_block *fn = (Fn_block *)b;
-            symbol_table[fn->name] = pair(fn, bytecode.size());
+
+            symbol_table[fn->name] = pair(fn, place);
+            // symbol_table.insert(pair(fn->name, pair(fn, place + 1)));
+
             if (fn->name == "start") {
-                bytecode[0] = bytecode.size() + 1;
+                bytecode[0] = place;
             }
             M->blocks = fn->body;
             auto g = new snailer_byte_generator(M);
+            g->symbol_table.insert(symbol_table.begin(), symbol_table.end());
+
             g->proc_module();
+            place += g->place;
             bytecode.insert(bytecode.end(), g->bytecode.begin(),
                             g->bytecode.end());
         } else if (b->b_type == snailer_fn_call_block_t) {
@@ -163,18 +170,22 @@ void snailer_byte_generator::proc_module() {
 
             if (!symbol_table.contains(fn->name)) {
                 cout << "BAD NAME: " << fn->name << endl;
-                exit(-1);
+                exit(255);
             }
 
             Inst inst = b->raw_instruction();
-            if (fn->is_builtin) {
+            inst.opcode.value.INT8 = CALL_INST;
+            if (fn->is_builtin == true) {
                 inst.opcode = IWORD_8((int8_t)symbol_table[fn->name].second);
+            } else {
+                inst.params[0] = IWORD(symbol_table[fn->name].second);
             }
             uint8_t *bytes = produce_bytes(&inst);
 
             for (int i = 0; i < 15; i++) {
                 bytecode.push_back(bytes[i]);
             }
+            place += 1;
         }
     }
 }

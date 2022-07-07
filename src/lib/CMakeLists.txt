@@ -6,4 +6,4 @@ add_library(Stack ./stack.cc ./stack.h)
 target_link_libraries(Stack PUBLIC Core)
 
 add_library(Vm ./vm.h ./vm.cc)
-target_link_libraries(Vm PRIVATE Stack Core)
+target_link_libraries(Vm PRIVATE Stack Core spdlog)

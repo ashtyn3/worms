@@ -1,4 +1,11 @@
+fn hi -> i64 
+    &push 8 i64;
+    &exit;
+end hi;
+
 fn start -> i64
-    call &push 2 i32;
-    call &exit;
+    &push 2 i32;
+    call hi;
+    &exit;
 end start;
+

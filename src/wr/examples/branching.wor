@@ -1,0 +1,6 @@
+fn start -> i64
+    &push 2 i64;
+    &push 2 i64;
+    &equal;
+    &exit;
+end start;

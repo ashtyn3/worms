@@ -53,9 +53,10 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
     //
-    ifstream is(program.get<string>("filename"));
-    std::istream_iterator<uint8_t> start(is), end;
-    std::vector<uint8_t> file_bytes(start, end);
+    ifstream is(program.get<string>("filename"),
+                std::ios::in | std::ios::binary);
+    std::vector<uint8_t> file_bytes((std::istreambuf_iterator<char>(is)),
+                                    std::istreambuf_iterator<char>());
     //
     snailer_byte_loader *h = new snailer_byte_loader(file_bytes);
     auto vm = new Worms;
@@ -63,7 +64,7 @@ int main(int argc, char *argv[]) {
         vm->full_trace = true;
     }
     // cout << (int)h->instructions[6].opcode.value.INT8 << endl;
-    // vm->ip = IWORD(file_bytes[0]);
+    vm->ip = IWORD(file_bytes[0]);
     vm->load_program(h->instructions);
     vm->run();
 

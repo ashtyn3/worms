@@ -34,6 +34,7 @@ class snailer_byte_generator {
     uint8_t *produce_bytes(Inst *inst);
     Module *mod;
     map<string, pair<Block *, int>> symbol_table;
+    int place = 0;
 
   public:
     vector<uint8_t> bytecode = {0};

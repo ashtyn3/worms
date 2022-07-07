@@ -29,11 +29,6 @@ word Worms::exec() {
     Inst in = program[ip.value.INT];
     switch (in.opcode.value.INT8) {
 
-    case HALT_INST: {
-        halted = true;
-        break;
-    }
-
     case PUSH_INST: {
         if (stack.top + 1 >= STACK_SIZE) {
             return IWORD(TRAP_STACK_OVERFLOW);
@@ -51,13 +46,18 @@ word Worms::exec() {
         break;
     }
 
+    case HALT_INST: {
+        halted = true;
+        break;
+    }
+
     case DUP_INST: {
         word to_dup;
         if (in.flags[0].value.INT8 == 0) {
             to_dup = stack.at_top();
         } else if (in.flags[0].value.INT8 == 1) {
 
-            if (in.params[0].value.INT8 >= STACK_SIZE) {
+            if (in.params[0].value.INT >= STACK_SIZE) {
                 return IWORD(TRAP_STACK_OVERFLOW);
             }
 
@@ -225,8 +225,30 @@ word Worms::exec() {
         ip.value.INT++;
         break;
     }
+    case CALL_INST: {
+        /*
+        Calling convention:
+        The call instruction pushes the state of the instruction pointer to the
+        top of next stack frame. Then the the number of arguments passed and the
+        starting index of those arguments.
+        */
+        stack.frame = 0;
+        stack.push(IWORD(ip.value.INT + 1));
+        int arg_start = stack.top - in.flags[0].value.INT8;
+        stack.push(IWORD(arg_start));
+        stack.push(in.flags[0]);
+        ip = in.params[0];
+        break;
+    }
+    case RETURN_INST: {
+        stack.stack[stack.top - stack.frame] = stack.stack[stack.top];
+        stack.top = stack.top - stack.frame;
+        ip = stack.stack[stack.top + 1];
+        break;
+    }
     default:
-        cout << in.opcode.value.INT << endl;
+        // cout << ip.value.INT << " " << (int)in.opcode.value.INT8 << endl;
+        return IWORD(TRAP_UNKNOWN_OPCODE);
         break;
     }
     return IWORD(TRAP_OK);
@@ -245,6 +267,8 @@ string Worms::debug(word trap) {
         return "TRAP_BAD_JUMP";
     case TRAP_MAXIMUM_JUMP_STACK_EXCEEDED:
         return "TRAP_MAXIMUM_JUMP_STACK_EXCEEDED";
+    case TRAP_UNKNOWN_OPCODE:
+        return "TRAP_UNKNOWN_OPCODE";
     default:
         return "";
     };
@@ -271,7 +295,7 @@ void Worms::run() {
         if (status.value.INT != TRAP_OK) {
             cout << debug(status) << " AT ADDRESS " << ip.value.INT
                  << ": WITH OPCODE "
-                 << program.at(ip.value.INT).opcode.value.INT << endl;
+                 << (int)program.at(ip.value.INT).opcode.value.INT8 << endl;
             break;
         }
     }
