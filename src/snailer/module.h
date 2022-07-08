@@ -43,6 +43,7 @@ enum value_t {
     snailer_pointer_t,
 };
 string t_string(value_t t);
+string debug_value_type(value_t t);
 enum block_t {
     snailer_fn_block_t,
     snailer_fn_call_block_t,
@@ -99,8 +100,37 @@ class Value : public Block {
 
     string produce();
     Inst raw_instruction();
+    friend std::ostream &operator<<(std::ostream &os, const Value &v) {
+        os << "<Snailer <Value " << debug_value_type(v.type);
+        switch (v.type) {
+        case snailer_int64_t:
+            os << v.integer.value;
+            break;
+        case snailer_int32_t:
+            os << v.integer.value_32;
+            break;
+        case snailer_int16_t:
+            os << v.integer.value_16;
+            break;
+        case snailer_int8_t:
+            os << v.integer.value_8;
+            break;
+        case snailer_float64_t:
+            os << v.s_float.value;
+            break;
+        case snailer_pointer_t:
+            os << "0x" << std::hex << v.ptr.value;
+            break;
+        case snailer_null_t:
+            os << "Nil";
+            break;
+        }
+        os << "> >";
+        return os;
+    }
     Value() { b_type = snailer_value_t; };
 };
+
 class Snailer_param : public Block {
   public:
     string name;
@@ -108,6 +138,12 @@ class Snailer_param : public Block {
     Snailer_param(string name, value_t vt) : name(name), val_t(vt) {
         b_type = Snailer_param_t;
     };
+    friend std::ostream &operator<<(std::ostream &os, const Snailer_param &v) {
+        os << "<Snailer <Parameter ";
+        os << debug_value_type(v.val_t) << " ";
+        os << v.name << "> >";
+        return os;
+    }
     string produce();
 };
 

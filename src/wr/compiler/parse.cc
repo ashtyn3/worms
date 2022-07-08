@@ -81,8 +81,8 @@ Parse_tok *Parser::parse_fn() {
         next_tok();
     } else {
         if (tok.pos.line == curr_line || tok.pos.line < curr_line) {
-            cout << "broken syntax (" << tok.pos.start_col << ":"
-                 << tok.pos.line << "): expected -> or newline" << endl;
+            spdlog::critical("broken syntax ({}:{}): expected -> or newline",
+                             tok.pos.start_col, tok.pos.line);
             exit(1);
         }
     }
@@ -120,8 +120,8 @@ Parse_tok *Parser::parse_param() {
     next_tok();
 
     if (tok.type != BUILTIN || tok.pos.line != curr_line) {
-        cout << "broken syntax (" << tok.pos.start_col << ":" << tok.pos.line
-             << "): expected param type" << endl;
+        spdlog::critical("broken syntax ({}:{}): expected param type",
+                         tok.pos.start_col, tok.pos.line);
         exit(1);
     } else {
         param->type = tok.token;
@@ -275,9 +275,10 @@ Parse_tok *Parser::run() {
     } else if (tok.token == "ret") {
         t = parse_ret();
     } else {
-        cout << "unexpected lexer token (" << tok.pos.start_col << ":"
-             << tok.pos.line << "): " << tok.token << endl;
-        cout << "  token type: " << tok.type << endl;
+
+        spdlog::critical("unexpected lexer token ({}:{}): {}",
+                         tok.pos.start_col, tok.pos.line, tok.token);
+        cout << "  - token type: " << tok.type << endl;
         exit(1);
         return {};
     }

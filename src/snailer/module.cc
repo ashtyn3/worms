@@ -43,6 +43,31 @@ string t_string(value_t t) {
         return "f64";
     }
 }
+string debug_value_type(value_t t) {
+    switch (t) {
+    case snailer_int64_t:
+        return "Int64";
+        break;
+    case snailer_int32_t:
+        return "Int32";
+        break;
+    case snailer_int16_t:
+        return "Int16";
+        break;
+    case snailer_int8_t:
+        return "Int8";
+        break;
+    case snailer_float64_t:
+        return "Float64";
+        break;
+    case snailer_pointer_t:
+        return "Ptr";
+        break;
+    case snailer_null_t:
+        return "Null";
+        break;
+    }
+}
 
 string Fn_block::produce() {
     string str;

@@ -1,4 +1,4 @@
-fn hi -> i64 
+fn hi
     &push 8 i64;
     &exit;
 end hi;

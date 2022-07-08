@@ -161,7 +161,7 @@ void Lexer::Lex() {
                             .type = EQUAL,
                             .token = "="});
         } else {
-            cout << "unknown token: " << ch << endl;
+            spdlog::critical("unknown token: {}", ch);
         }
     }
 }

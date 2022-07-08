@@ -47,14 +47,15 @@ Fn_block *code_gen::gen_fn() {
         fn_b->body = body;
 
         if (fn->params.size() > 0) {
-            cout << "Function parameters are unsupported currently." << endl;
+            spdlog::warn("Function parameters are unsupported currently.");
             cout << "  - Ignoring " << fn->params.size() << " params" << endl;
         }
 
         next();
         return fn_b;
     } else {
-        cout << "Cannot redeclare function: " << fn->name << endl;
+        spdlog::critical("Cannot redeclare function: {}", fn->name);
+        exit(1);
     }
     next();
     return nullptr;
@@ -68,8 +69,8 @@ Fn_call_block *code_gen::gen_fn_call() {
         auto p = c->while_gen();
         for (int j = 0; j < (int)p.size(); j++) {
             if (p[j]->b_type != snailer_value_t) {
-                cout << "Expected token of type Value at line " << ptok->line
-                     << endl;
+                spdlog::critical("Expected token of type Value at line {}",
+                                 ptok->line);
             }
             fn_call_b->add_param((Value *)p[j]);
         }
@@ -121,8 +122,8 @@ Block *code_gen::gen() {
     } else if (ptok->type == param_t) {
         return gen_value();
     } else {
-        cout << "Unknown parse type (" << ptok->type << ") at line"
-             << ptok->line << endl;
+        spdlog::critical("Unknown parse type ({}) at line {}", ptok->type,
+                         ptok->line);
         exit(1);
     }
 }

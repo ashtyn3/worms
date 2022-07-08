@@ -52,12 +52,12 @@ int main(int argc, char *argv[]) {
         std::cerr << program;
         std::exit(1);
     }
-    //
+
     ifstream is(program.get<string>("filename"),
                 std::ios::in | std::ios::binary);
     std::vector<uint8_t> file_bytes((std::istreambuf_iterator<char>(is)),
                                     std::istreambuf_iterator<char>());
-    //
+
     snailer_byte_loader *h = new snailer_byte_loader(file_bytes);
     auto vm = new Worms;
     if (program["-T"] == true) {
